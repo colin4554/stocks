@@ -1,5 +1,5 @@
 # from datetime import datetime
-# file = open("errors.txt", "a")
+# file = open("records.txt", "a")
 # file.write("\n" + str(datetime.now().date()) + ":")
 # file.write("\nError " + str(datetime.now().replace(microsecond=0)))
 #

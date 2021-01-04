@@ -226,7 +226,7 @@ def sqlRead():
 # --- Main Execution --- #
 
 # file to log errors (w - write, a - append)
-file = open("errors.txt", "a")
+file = open("records.txt", "a")
 file.write("\n" + str(datetime.now().date()) + ":")
 
 

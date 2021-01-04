@@ -1,0 +1,12 @@
+2021-01-03:
+2021-01-03:
+Run Ended
+
+2021-01-04:
+AAPL: previous date: 2021-01-03 08:00:00 scraped date: 2021-01-03 08:00:00, scrape will stop at index 15
+AMZN: previous date: 2021-01-03 10:28:00 scraped date: 2021-01-03 10:28:00, scrape will stop at index 13
+GOOG: previous date: 2021-01-03 10:43:00 scraped date: 2021-01-03 10:43:00, scrape will stop at index 22
+FB: previous date: 2021-01-03 08:00:00 scraped date: 2021-01-03 08:00:00, scrape will stop at index 6
+MSFT: previous date: 2021-01-02 09:00:00 scraped date: 2021-01-02 09:00:00, scrape will stop at index 12
+CRM: previous date: 2021-01-02 09:49:00 scraped date: 2021-01-02 09:49:00, scrape will stop at index 7
+Run Ended
