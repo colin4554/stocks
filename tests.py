@@ -16,7 +16,7 @@
 # file.close()
 #
 # import pandas as pd
-# df = pd.read_csv('S&P500_Tickers')
+# df = pd.read_csv('S&P500_Tickers.csv')
 # print(df['ticker'])
 #
 # file = open("records.txt", "a")
