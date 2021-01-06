@@ -20,5 +20,5 @@ for i, row in enumerate(rows[1:]):
   dic = {'ticker' : items[0].text[0:-1], 'company name' : items[1].text, 'sector' : items[3].text, 'sub-industry' : items[4].text, 'date first added' : items[6].text}
   df = df.append(dic, ignore_index=True)
 
-df.to_csv('S&P500_Tickers', index=False)
+df.to_csv('S&P500_Tickers.csv', index=False)
 

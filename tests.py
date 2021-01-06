@@ -14,7 +14,10 @@
 #
 #
 # file.close()
-
-import pandas as pd
-df = pd.read_csv('S&P500_Tickers')
-print(df)
+#
+# import pandas as pd
+# df = pd.read_csv('S&P500_Tickers')
+# print(df['ticker'])
+#
+# file = open("records.txt", "a")
+# file.write("\n" + str(datetime.now().date()) + " ("  + str(datetime.now().time().replace(microsecond=0)) + "):")

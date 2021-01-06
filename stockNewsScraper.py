@@ -227,8 +227,7 @@ def sqlRead():
 
 # file to log errors (w - write, a - append)
 file = open("records.txt", "a")
-file.write("\n" + str(datetime.now().date()) + ":")
-
+file.write("\n" + str(datetime.now().date()) + " (" + str(datetime.now().time().replace(microsecond=0)) + "):")
 
 # header for newspaper
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
