@@ -194,7 +194,7 @@ def databaseCopy(df):
 
 
     try:
-        client = bigquery.Client()
+
         table_id = "the-utility-300815.stock_news.SP500"
 
         job_config = bigquery.LoadJobConfig(
@@ -222,7 +222,7 @@ def databaseCopy(df):
 
 
 def databaseRead():
-    client = bigquery.Client()
+
     project = "the-utility-300815"
     dataset_id = "stock_news"
 
@@ -235,6 +235,13 @@ def databaseRead():
 
 
 # --- Main Execution --- #
+
+
+# client = bigquery.Client()
+# big query client, need to include authorization
+client = bigquery.Client.from_service_account_json("api-auth.json")
+
+
 
 # file to log errors (w - write, a - append)
 file = open("records.txt", "a")
