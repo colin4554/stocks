@@ -197,10 +197,10 @@ def sqlCopy(df):
         df.to_sql(postgreSQLTable, connect, if_exists='append');
     except ValueError as vx:
         print(vx)
-        file.write("\n" + str(datetime.now().replace(microsecond=0)) + ' sqlCopy Error: ' + str(vx))
+        file.write("\n" + str(datetime.now().replace(microsecond=0)) + ' databaseCopy Error: ' + str(vx))
     except Exception as ex:
         print(ex)
-        file.write("\n" + str(datetime.now().replace(microsecond=0)) + ' sqlCopy Error: ' + str(ex))
+        file.write("\n" + str(datetime.now().replace(microsecond=0)) + ' databaseCopy Error: ' + str(ex))
     else:
         print("PostgreSQL Table %s has been created successfully." % postgreSQLTable);
     finally:
