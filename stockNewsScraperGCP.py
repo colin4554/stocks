@@ -178,7 +178,7 @@ def createDF(tickerlist, df, HEADERS):
             df = df.append(row, ignore_index=True)
 
             if i == stopIndex:
-                print(ticker + ": scrape stopped at %i" %stopIndex)
+                print(ticker + ": scrape stopped at %i" % stopIndex)
                 break
 
     # TIMES are in EST Time
