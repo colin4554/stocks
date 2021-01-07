@@ -2,3 +2,5 @@
 /shelf/
 /workspace.xml
 /postgress_credentials.txt
+# do this for GCP? I just don't want it to get overwritten when I try to make code updates
+# /records.txt
