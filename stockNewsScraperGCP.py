@@ -43,53 +43,57 @@ from google.cloud import bigquery
 # reads old dataframe and takes most recent date and time scraped
 # then finds corresponding index to stop scraping at
 def stopScrape(ticker, oldDf, HEADERS):
-    # creates url
-    url = 'https://finviz.com/quote.ashx?t=' + ticker
+    try:
+        # creates url
+        url = 'https://finviz.com/quote.ashx?t=' + ticker
 
-    # gets news data from table
-    req = requests.get(url, headers=HEADERS)
-    soup = BeautifulSoup(req.content, 'html.parser')
-    news_table = soup.find(id='news-table')
+        # gets news data from table
+        req = requests.get(url, headers=HEADERS)
+        soup = BeautifulSoup(req.content, 'html.parser')
+        news_table = soup.find(id='news-table')
 
-    # splits based on tag for each row of news
-    news_tr = news_table.findAll('tr')
+        # splits based on tag for each row of news
+        news_tr = news_table.findAll('tr')
 
-    # gets most recent date and time from last scrape
-    oldDf = oldDf.sort_values(by=['date', 'time'], ascending=[False, False])
+        # gets most recent date and time from last scrape
+        oldDf = oldDf.sort_values(by=['date', 'time'], ascending=[False, False])
 
-    date = oldDf[oldDf['ticker'] == ticker]['date'].iloc[0]
-    date = datetime.strptime(date, '%b-%d-%y')
-    time = str(oldDf[oldDf['ticker'] == ticker]['time'].iloc[0])
-    if time[-1] != "M":
-        time = time[0:-2]
-    time = datetime.strptime(time, '%I:%M%p').time()
+        date = oldDf[oldDf['ticker'] == ticker]['date'].iloc[0]
+        date = datetime.strptime(date, '%b-%d-%y')
+        time = str(oldDf[oldDf['ticker'] == ticker]['time'].iloc[0])
+        if time[-1] != "M":
+            time = time[0:-2]
+        time = datetime.strptime(time, '%I:%M%p').time()
 
-    # this is last scraped article date/time
-    trueDate = datetime.combine(date, time)
+        # this is last scraped article date/time
+        trueDate = datetime.combine(date, time)
 
-    # cycles through articles and finds safe index to scrape too based on oldDf
-    for i, table_row in enumerate(news_tr):
+        # cycles through articles and finds safe index to scrape too based on oldDf
+        for i, table_row in enumerate(news_tr):
 
-        # scrapes current date and time from news item.  Date will hold over
-        if len(table_row.td.text.split()) == 1:
-            # weird characters at the end, not spaces couldn't be removed any other way
-            time2 = datetime.strptime(table_row.td.text[0:-2], '%I:%M%p').time()
-        else:
-            # date2 =
-            date2 = datetime.strptime(table_row.td.text.split()[0], '%b-%d-%y')
-            time2 = datetime.strptime(table_row.td.text.split()[1], '%I:%M%p').time()
+            # scrapes current date and time from news item.  Date will hold over
+            if len(table_row.td.text.split()) == 1:
+                # weird characters at the end, not spaces couldn't be removed any other way
+                time2 = datetime.strptime(table_row.td.text[0:-2], '%I:%M%p').time()
+            else:
+                # date2 =
+                date2 = datetime.strptime(table_row.td.text.split()[0], '%b-%d-%y')
+                time2 = datetime.strptime(table_row.td.text.split()[1], '%I:%M%p').time()
 
-        # scraped date of aritcle to analyze
-        scrapeDate = datetime.combine(date2, time2)
+            # scraped date of aritcle to analyze
+            scrapeDate = datetime.combine(date2, time2)
 
-        if scrapeDate - trueDate <= timedelta(0):
-            message = ticker + ': previous date: %s scraped date: %s, scrape will stop at index %i' % (trueDate, scrapeDate, i + 1)
-            print(message)
-            file.write("\n" + message)
-            # buffer of one adds a duplicate
-            return i + 1
+            if scrapeDate - trueDate <= timedelta(0):
+                message = ticker + ': previous date: %s scraped date: %s, scrape will stop at index %i' % (trueDate, scrapeDate, i + 1)
+                print(message)
+                file.write("\n" + message)
+                # buffer of one adds a duplicate
+                return i + 1
+    except Exception as e:
+        print("error occurred with stop scrape function " + str(e))
     # if no match, scrape everything
-    return 100
+    finally:
+        return 100
 
 
 # Yahoo Finance ad for 'Tip Ranks' breaks newspaper3k
