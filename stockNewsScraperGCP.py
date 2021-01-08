@@ -290,10 +290,14 @@ def main():
     # don't need to declare all columns for it to populate them
     df = pd.DataFrame(columns=['ticker', 'date', 'time', 'link', 'source', 'title'])
 
-    oldDf = databaseRead(client)
+    try:
+        oldDf = databaseRead(client)
+    except:
+        print("databaseRead failed: data does not exist")
+        oldDf = []
 
-    # tickerList = ['AAPL', 'AMZN', 'GOOG', 'FB', 'MSFT', 'CRM']
-    tickerList = getTickerList(oldDf)
+    tickerList = ['AAPL', 'AMZN', 'GOOG', 'FB', 'MSFT', 'CRM']
+    # tickerList = getTickerList(oldDf)
 
     file.write(str(len(tickerList)) + " tickers for today's scraping: " + str(tickerList))
     print(str(len(tickerList)) + " tickers for today's scraping: " + str(tickerList))
