@@ -296,7 +296,8 @@ def main():
         print("databaseRead failed: data does not exist")
         oldDf = []
 
-    tickerList = ['AAPL', 'AMZN', 'GOOG', 'FB', 'MSFT', 'CRM']
+    # tickerList = ['AAPL', 'AMZN', 'GOOG', 'FB', 'MSFT', 'CRM']
+    tickerList = ['AMZN']
     # tickerList = getTickerList(oldDf)
 
     file.write(str(len(tickerList)) + " tickers for today's scraping: " + str(tickerList))
