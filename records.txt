@@ -19,3 +19,24 @@ FB: previous date: 2021-01-04 11:18:00 scraped date: 2021-01-04 11:18:00, scrape
 MSFT: previous date: 2021-01-04 12:44:00 scraped date: 2021-01-04 12:44:00, scrape will stop at index 22
 CRM: previous date: 2021-01-04 11:02:00 scraped date: 2021-01-04 09:49:00, scrape will stop at index 5
 Run Ended
+
+2021-01-07 (09:15:41):
+AAPL: previous date: 2021-01-05 12:48:00 scraped date: 2021-01-05 12:48:00, scrape will stop at index 48
+AMZN: previous date: 2021-01-05 12:59:00 scraped date: 2021-01-05 12:59:00, scrape will stop at index 65
+https://www.investors.com/news/technology/amazon-stock-buy-now-branch/?src=A00220... article skipped due to error: Article `download()` failed with 403 Client Error: Forbidden for url: https://www.investors.com/news/technology/amazon-stock-buy-now-branch/?src=A00220 on URL https://www.investors.com/news/technology/amazon-stock-buy-now-branch/?src=A00220
+GOOG: previous date: 2021-01-05 00:53:00 scraped date: 2021-01-05 00:53:00, scrape will stop at index 37
+FB: previous date: 2021-01-05 12:29:00 scraped date: 2021-01-05 12:29:00, scrape will stop at index 43
+MSFT: previous date: 2021-01-05 12:59:00 scraped date: 2021-01-05 12:59:00, scrape will stop at index 26
+CRM: previous date: 2021-01-05 05:51:00 scraped date: 2021-01-05 05:51:00, scrape will stop at index 8
+Run Ended
+
+2021-01-07 (16:38:39):
+2021-01-07 (16:39:07):
+2021-01-07 (16:39:24):
+2021-01-07 (16:39:41):
+2021-01-07 (16:41:46):
+AAPL: previous date: 2021-01-07 10:01:00 scraped date: 2021-01-07 10:00:00, scrape will stop at index 10
+2021-01-07 (16:42:25):
+2021-01-07 (16:43:26):
+2021-01-07 (16:48:17):
+2021-01-07 (18:48:17):

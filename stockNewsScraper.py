@@ -223,6 +223,34 @@ def sqlRead():
 
     return df
 
+def getTickerList(oldDf):
+    tickerList = []
+    #df = pd.read_csv('S&P500.csv')
+    #mainTickerList = [df['ticker'], df['newsDateLength']]
+    mainTickerList = [['AAPL', 'AMZN', 'GOOG', 'FB', 'MSFT', 'CRM'], [7, 3, 8, 9, 10, 34]]
+    oldDf = oldDf.sort_values(by=['date', 'time'], ascending=[False, False])
+
+
+    for i in range(len(mainTickerList[0])):
+        ticker = mainTickerList[0][i]
+        length = mainTickerList[1][i]
+
+        # if no record exists in database, add to scraping date
+        if oldDf['ticker'][oldDf['ticker'] == ticker].sum() == 0:
+            tickerList += [ticker]
+        else:
+            # get last scraped date
+            date = oldDf[oldDf['ticker'] == ticker]['date'].iloc[0]
+            date = datetime.strptime(date, '%b-%d-%y')
+            print(ticker + " " + str(date.date()))
+            dateDif = datetime.now() - date
+            print(ticker + " " + str(dateDif.days))
+
+            # if the number of days since last scraped is more than a 4th of the number of dates present, scrape again
+            if dateDif.days > length / 4:
+                tickerList += [ticker]
+    return tickerList
+
 # --- Main Execution --- #
 
 # file to log errors (w - write, a - append)
@@ -236,12 +264,16 @@ HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleW
 df = pd.DataFrame(columns=['ticker', 'date', 'time', 'link', 'source', 'title'])
 
 # CRM = salesforce
-tickerlist = ['AAPL', 'AMZN', 'GOOG', 'FB', 'MSFT', 'CRM']
-# tickerlist = ['AAPL']
+# tickerlist = ['AAPL', 'AMZN', 'GOOG', 'FB', 'MSFT', 'CRM']
+tickerList = getTickerList(sqlRead())
+
+file.write(str(len(tickerList)) + " tickers for today's scraping: " + tickerList)
+print(str(len(tickerList)) + " tickers for today's scraping: " + tickerList)
+
 # change replace to append
 
 # creates dataframe
-df = createDF(tickerlist, df, HEADERS)
+df = createDF(tickerList, df, HEADERS)
 print(df)
 
 sqlCopy(df)

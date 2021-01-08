@@ -16,8 +16,23 @@
 # file.close()
 #
 # import pandas as pd
-# df = pd.read_csv('S&P500_Tickers.csv')
-# print(df['ticker'])
+# # df = pd.read_csv('S&P500.csv')
+# # print(df['ticker'][df['ticker'] == 'MJH'].sum())
+# tickerList = []
+# df = pd.read_csv('S&P500.csv')
+# mainTickerList = [df['ticker'], df['newsDateLength']]
+# #oldDf = oldDf.sort_values(by=['date', 'time'], ascending=[False, False])
+#
+# for i in range(len(mainTickerList[0])):
+#     ticker = mainTickerList[0][i]
+#     length = mainTickerList[1][i]
+#     print(ticker + ": " + str(length))
+#     if i > 20:
+#         break
+
+
 #
 # file = open("records.txt", "a")
 # file.write("\n" + str(datetime.now().date()) + " ("  + str(datetime.now().time().replace(microsecond=0)) + "):")
+
+print(str([1,2]))

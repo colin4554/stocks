@@ -1,5 +1,3 @@
-import psycopg2
-from psycopg2 import Error
 import pandas as pd
 import os
 import newspaper
@@ -8,11 +6,11 @@ import time
 import requests
 from bs4 import BeautifulSoup
 import nltk
-from sqlalchemy import create_engine
 from datetime import datetime, timedelta
 import pytz
 
 from google.cloud import bigquery
+import schedule
 
 
 
@@ -42,7 +40,7 @@ from google.cloud import bigquery
 # Function to speed up scraping and reduce duplicates
 # reads old dataframe and takes most recent date and time scraped
 # then finds corresponding index to stop scraping at
-def stopScrape(ticker, oldDf, HEADERS):
+def stopScrape(file, ticker, oldDf, HEADERS):
     try:
         # creates url
         url = 'https://finviz.com/quote.ashx?t=' + ticker
@@ -110,7 +108,7 @@ def yahoo_get_text(article):
                       'full_text': text, 'meta descr': article.meta_description, 'error': 'yahoo finance workaround'}
 
 
-def articleInfo(url):
+def articleInfo(file, url):
     try:
         try:
           # old_browser_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'
@@ -141,7 +139,7 @@ def articleInfo(url):
         return {'error': 'article skipped'}
 
 
-def createDF(tickerlist, df, HEADERS):
+def createDF(file, tickerlist, df, HEADERS, oldDf):
     startTime = datetime.strptime(datetime.now().strftime('%H:%M:%S'), '%H:%M:%S')
     for ticker in tickerlist:
         time.sleep(1)
@@ -158,13 +156,12 @@ def createDF(tickerlist, df, HEADERS):
         news_tr = news_table.findAll('tr')
 
         # gets index to stop at
-        oldDf = databaseRead()
-        stopIndex = stopScrape(ticker, oldDf, HEADERS)
+        stopIndex = stopScrape(file, ticker, oldDf, HEADERS)
 
         # adds row to dataframe based on date/time
         for i, table_row in enumerate(news_tr):
             url = table_row.a['href']
-            info = articleInfo(url)
+            info = articleInfo(file, url)
 
             # shows progress to user
             if i % 20 == 0:
@@ -193,10 +190,8 @@ def createDF(tickerlist, df, HEADERS):
 
 
 # function to put data into postgresql database
-def databaseCopy(df):
+def databaseCopy(file, client, df):
     # create_engine('Database Dialect://Username:Password@Server/Name of Database)
-
-
     try:
 
         table_id = "the-utility-300815.stock_news.SP500"
@@ -204,12 +199,24 @@ def databaseCopy(df):
         job_config = bigquery.LoadJobConfig(
             # use autodetection over manually declaring schema
             # default is also append
-            autodetect=True, source_format=bigquery.SourceFormat.CSV
-        )
+        #     autodetect=True, source_format=bigquery.SourceFormat.CSV
+        # )
 
-        # schema=[
-        #     bigquery.SchemaField("title", bigquery.enums.SqlTypeNames.STRING),
-        #     bigquery.SchemaField("wikidata_id", bigquery.enums.SqlTypeNames.STRING)]
+        schema=[
+            bigquery.SchemaField("index", "INT64"),
+            bigquery.SchemaField("ticker", "STRING"),
+            bigquery.SchemaField("date", "DATE"),
+            bigquery.SchemaField("time", "TIME"),
+            bigquery.SchemaField("link", "STRING"),
+            bigquery.SchemaField("source", "STRING"),
+            bigquery.SchemaField("title", "STRING"),
+            bigquery.SchemaField("full_text", "STRING"),
+            bigquery.SchemaField("keywords", "STRING"),
+            bigquery.SchemaField("meta_descr", "STRING"),
+            bigquery.SchemaField("summary", "STRING"),
+            bigquery.SchemaField("error", "STRING"),
+            bigquery.SchemaField("scraped_date", "DATETIME")
+        ])
 
         job = client.load_table_from_dataframe(
             df, table_id, job_config=job_config
@@ -225,7 +232,7 @@ def databaseCopy(df):
         print("df has been appended successfully.")
 
 
-def databaseRead():
+def databaseRead(client):
 
     project = "the-utility-300815"
     dataset_id = "stock_news"
@@ -237,38 +244,70 @@ def databaseRead():
     # returns entire database
     return client.list_rows(table).to_dataframe()
 
+def getTickerList(oldDf):
+    tickerList = []
+    df = pd.read_csv('S&P500.csv')
+    mainTickerList = [df['ticker'], df['newsDateLength']]
+    oldDf = oldDf.sort_values(by=['date', 'time'], ascending=[False, False])
+
+    for i in range(len(mainTickerList[0])):
+        ticker = mainTickerList[0][i]
+        length = mainTickerList[1][i]
+
+        # if no record exists in database, add to scraping date
+        if oldDf['ticker'][oldDf['ticker'] == ticker].sum() == 0:
+            tickerList += [ticker]
+        else:
+            # get last scraped date
+            date = oldDf[oldDf['ticker'] == ticker]['date'].iloc[0]
+            date = datetime.strptime(date, '%b-%d-%y')
+            dateDif = datetime.now() - date
+            #print(ticker + " " + str(dateDif.days))
+
+            # if the number of days since last scraped is more than a 4th of the number of dates present, scrape again
+            if dateDif.days > length / 4:
+                tickerList += [ticker]
+    return tickerList
+
+
+
 
 # --- Main Execution --- #
 
+def main():
+    # client = bigquery.Client()
+    # big query client, need to include authorization
+    client = bigquery.Client.from_service_account_json("api-auth.json")
 
-# client = bigquery.Client()
-# big query client, need to include authorization
-client = bigquery.Client.from_service_account_json("api-auth.json")
+    # file to log errors (w - write, a - append)
+    file = open("recordsGCP.txt", "a")
+
+    file.write("\n" + str(datetime.now().date()) + " (" + str(datetime.now().time().replace(microsecond=0)) + "):")
+
+    # header for newspaper
+    HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+
+    # don't need to declare all columns for it to populate them
+    df = pd.DataFrame(columns=['ticker', 'date', 'time', 'link', 'source', 'title'])
+
+    oldDf = databaseRead(client)
+
+    # tickerList = ['AAPL', 'AMZN', 'GOOG', 'FB', 'MSFT', 'CRM']
+    tickerList = getTickerList(oldDf)
+
+    file.write(str(len(tickerList)) + " tickers for today's scraping: " + str(tickerList))
+    print(str(len(tickerList)) + " tickers for today's scraping: " + str(tickerList))
+
+    # creates dataframe
+    df = createDF(file, tickerList, df, HEADERS, oldDf)
+    print(df)
+
+    databaseCopy(file, client, df)
+
+    df = databaseRead(client)
+    print(df)
+    file.write("\nRun Ended\n")
+    file.close()
 
 
-
-# file to log errors (w - write, a - append)
-file = open("records.txt", "a")
-file.write("\n" + str(datetime.now().date()) + " (" + str(datetime.now().time().replace(microsecond=0)) + "):")
-
-# header for newspaper
-HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
-
-# don't need to declare all columns for it to populate them
-df = pd.DataFrame(columns=['ticker', 'date', 'time', 'link', 'source', 'title'])
-
-# CRM = salesforce
-tickerlist = ['AAPL', 'AMZN', 'GOOG', 'FB', 'MSFT', 'CRM']
-# tickerlist = ['AAPL']
-# change replace to append
-
-# creates dataframe
-df = createDF(tickerlist, df, HEADERS)
-print(df)
-
-databaseCopy(df)
-
-df = databaseRead()
-print(df)
-file.write("\nRun Ended\n")
-file.close()
+main()
