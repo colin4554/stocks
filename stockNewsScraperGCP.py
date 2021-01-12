@@ -178,7 +178,7 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
                        **info}
             df = df.append(row, ignore_index=True)
 
-            if i == stopIndex or i == 10:
+            if i == stopIndex or i == 4:
                 print(ticker + ": scrape stopped at %i" % stopIndex)
                 break
 
@@ -212,7 +212,7 @@ def databaseCopy(file, client, df):
             bigquery.SchemaField("source", "STRING"),
             bigquery.SchemaField("title", "STRING"),
             bigquery.SchemaField("full_text", "STRING"),
-            bigquery.SchemaField("keywords", "ARRAY"),
+            bigquery.SchemaField("keywords", "STRUCT"),
             bigquery.SchemaField("meta_descr", "STRING"),
             bigquery.SchemaField("summary", "STRING"),
             bigquery.SchemaField("error", "STRING"),
