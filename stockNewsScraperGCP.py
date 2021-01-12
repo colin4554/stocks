@@ -159,6 +159,7 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
 
         # gets index to stop at
         stopIndex = stopScrape(file, ticker, oldDf, HEADERS)
+        print(stopIndex)
 
         # adds row to dataframe based on date/time
         for i, table_row in enumerate(news_tr):
