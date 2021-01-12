@@ -90,8 +90,7 @@ def stopScrape(file, ticker, oldDf, HEADERS):
     except Exception as e:
         print("error occurred with stop scrape function " + str(e))
     # if no match, scrape everything
-    finally:
-        return 100
+    return 100
 
 
 # Yahoo Finance ad for 'Tip Ranks' breaks newspaper3k
@@ -159,7 +158,7 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
 
         # gets index to stop at
         stopIndex = stopScrape(file, ticker, oldDf, HEADERS)
-        print(stopIndex)
+
 
         # adds row to dataframe based on date/time
         for i, table_row in enumerate(news_tr):
