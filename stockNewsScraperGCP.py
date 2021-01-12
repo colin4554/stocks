@@ -212,7 +212,7 @@ def databaseCopy(file, client, df):
             bigquery.SchemaField("source", "STRING"),
             bigquery.SchemaField("title", "STRING"),
             bigquery.SchemaField("full_text", "STRING"),
-            bigquery.SchemaField("keywords", "STRING"),
+            bigquery.SchemaField("keywords", "ARRAY"),
             bigquery.SchemaField("meta_descr", "STRING"),
             bigquery.SchemaField("summary", "STRING"),
             bigquery.SchemaField("error", "STRING"),
