@@ -178,9 +178,10 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
                        **info}
             df = df.append(row, ignore_index=True)
 
-            if i == stopIndex:
+            if i == stopIndex or i == 10:
                 print(ticker + ": scrape stopped at %i" % stopIndex)
                 break
+
 
     # TIMES are in EST Time
     # fills in dates
@@ -242,7 +243,7 @@ def databaseRead(client):
     table = client.get_table(table_ref)
 
     # returns entire database
-    return client.list_rows(table).to_dataframe()
+    return []#client.list_rows(table).to_dataframe()
 
 def getTickerList(oldDf):
     tickerList = []
