@@ -54,14 +54,20 @@ def stopScrape(file, ticker, oldDf, HEADERS):
         news_tr = news_table.findAll('tr')
 
         # gets most recent date and time from last scrape
+        oldDf['time'] = pd.to_datetime(oldDf['time'], format='%I:%M%p')
         oldDf = oldDf.sort_values(by=['date', 'time'], ascending=[False, False])
 
         date = oldDf[oldDf['ticker'] == ticker]['date'].iloc[0]
         date = datetime.strptime(date, '%b-%d-%y')
-        time = str(oldDf[oldDf['ticker'] == ticker]['time'].iloc[0])
-        if time[-1] != "M":
-            time = time[0:-2]
-        time = datetime.strptime(time, '%I:%M%p').time()
+
+        time = oldDf[oldDf['ticker'] == ticker]['time'].iloc[0]
+
+
+
+        # time = str(oldDf[oldDf['ticker'] == ticker]['time'].iloc[0])
+        # if time[-1] != "M":
+        #     time = time[0:-2]
+        # time = datetime.strptime(time, '%I:%M%p').time()
 
         # this is last scraped article date/time
         trueDate = datetime.combine(date, time)
