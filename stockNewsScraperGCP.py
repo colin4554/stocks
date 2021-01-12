@@ -53,14 +53,19 @@ def stopScrape(file, ticker, oldDf, HEADERS):
         # splits based on tag for each row of news
         news_tr = news_table.findAll('tr')
 
-        # gets most recent date and time from last scrape
+        oldDf = oldDf[oldDf['ticker'] == ticker]
+
+        # sorts dataframe
+        oldDf['time'] = oldDf['time'].str.slice(start=0, stop=6)
         oldDf['time'] = pd.to_datetime(oldDf['time'], format='%I:%M%p')
+
         oldDf = oldDf.sort_values(by=['date', 'time'], ascending=[False, False])
 
-        date = oldDf[oldDf['ticker'] == ticker]['date'].iloc[0]
+        # gets most recent date and time from last scrape
+        date = oldDf['date'].iloc[0]
         date = datetime.strptime(date, '%b-%d-%y')
 
-        time = oldDf[oldDf['ticker'] == ticker]['time'].iloc[0]
+        time = oldDf['time'].iloc[0]
 
 
 
