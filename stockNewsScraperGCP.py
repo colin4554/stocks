@@ -225,9 +225,10 @@ def databaseCopy(file, client, df):
             df, table_id, job_config=job_config
         )  # Make an API request.
         job.result()  # Wait for the job to complete.
+        print("df appended to database")
 
-        table = client.get_table(table_id)  # Make an API request.
-        print("Loaded {} rows and {} columns to {}".format(table.num_rows, len(table.schema), table_id))
+        # table = client.get_table(table_id)  # Make an API request.
+        # print("Loaded {} rows and {} columns to {}".format(table.num_rows, len(table.schema), table_id))
     except Exception as e:
         print("Error occurred when copying df to big query: " + str(e))
         file.write("\n" + str(datetime.now().replace(microsecond=0)) + ' databaseCopy Error: ' + str(e))
@@ -309,7 +310,7 @@ def main():
     # creates dataframe
     df = createDF(file, tickerList, df, HEADERS, oldDf)
     print(df)
-    print(df['summary'])
+
 
     databaseCopy(file, client, df)
 
