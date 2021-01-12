@@ -180,7 +180,7 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
                        **info}
             df = df.append(row, ignore_index=True)
 
-            if i == stopIndex or i == 4:
+            if i == stopIndex:
                 print(ticker + ": scrape stopped at %i" % stopIndex)
                 break
 
