@@ -106,7 +106,7 @@ def yahoo_get_text(article):
     summary = ' '. join(sentence for sentence in summary)
     keywords = "-".join([item for item in article.keywords])
     return {'title': article.title, 'keywords': keywords, 'summary': summary,
-                      'full_text': text, 'meta descr': article.meta_description, 'error': 'yahoo finance workaround'}
+                      'full_text': text, 'meta_descr': article.meta_description, 'error': 'yahoo finance workaround'}
 
 
 def articleInfo(file, url):
