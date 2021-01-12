@@ -206,8 +206,8 @@ def databaseCopy(file, client, df):
         schema=[
             #bigquery.SchemaField("index", "INT64"),
             bigquery.SchemaField("ticker", "STRING"),
-            bigquery.SchemaField("date", "DATE"),
-            bigquery.SchemaField("time", "TIME"),
+            bigquery.SchemaField("date", "STRING"),
+            bigquery.SchemaField("time", "STRING"),
             bigquery.SchemaField("link", "STRING"),
             bigquery.SchemaField("source", "STRING"),
             bigquery.SchemaField("title", "STRING"),
@@ -216,7 +216,7 @@ def databaseCopy(file, client, df):
             bigquery.SchemaField("meta_descr", "STRING"),
             bigquery.SchemaField("summary", "STRING"),
             bigquery.SchemaField("error", "STRING"),
-            bigquery.SchemaField("scrape_date", "DATETIME")
+            bigquery.SchemaField("scrape_date", "STRING")
         ])
 
         job = client.load_table_from_dataframe(
