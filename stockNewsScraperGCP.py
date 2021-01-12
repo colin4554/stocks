@@ -245,7 +245,7 @@ def databaseRead(client):
     table = client.get_table(table_ref)
 
     # returns entire database
-    return []#client.list_rows(table).to_dataframe()
+    return client.list_rows(table).to_dataframe()
 
 def getTickerList(oldDf):
     tickerList = []
