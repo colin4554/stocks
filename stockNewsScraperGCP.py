@@ -67,7 +67,7 @@ def stopScrape(file, ticker, oldDf, HEADERS):
 
         time = oldDf['time'].iloc[0]
         print(time)
-        time = datetime.strptime(time, '%I:%M%p').time()
+        time = datetime.fromtimestamp(time).time()
 
 
 
