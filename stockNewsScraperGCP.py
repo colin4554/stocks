@@ -131,7 +131,7 @@ def articleInfo(file, url):
           if 'finance.yahoo.com' in article.url :
             return yahoo_get_text(article)
           else:
-            return {'title': article.title, 'keywords' : article.keywords, 'summary' : article.summary, 'full_text' : article.text, 'meta descr' : article.meta_description}
+            return {'title': article.title, 'keywords' : article.keywords, 'summary' : article.summary, 'full_text' : article.text, 'meta_descr' : article.meta_description}
 
     except Exception as e:
         print(article.url[8:40] + "... article skipped due to error: " + str(e)) #(%i out of %i)" % (i, len(list)))
@@ -203,7 +203,7 @@ def databaseCopy(file, client, df):
         # )
 
         schema=[
-            bigquery.SchemaField("index", "INT64"),
+            #bigquery.SchemaField("index", "INT64"),
             bigquery.SchemaField("ticker", "STRING"),
             bigquery.SchemaField("date", "DATE"),
             bigquery.SchemaField("time", "TIME"),
@@ -215,7 +215,7 @@ def databaseCopy(file, client, df):
             bigquery.SchemaField("meta_descr", "STRING"),
             bigquery.SchemaField("summary", "STRING"),
             bigquery.SchemaField("error", "STRING"),
-            bigquery.SchemaField("scraped_date", "DATETIME")
+            bigquery.SchemaField("scrape_date", "DATETIME")
         ])
 
         job = client.load_table_from_dataframe(
