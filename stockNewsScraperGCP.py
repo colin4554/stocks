@@ -104,7 +104,7 @@ def yahoo_get_text(article):
     summary = nlp.summarize(url=article.url, title=article.title, text=text, max_sents=5)
     # converts list into one paragraph
     summary = ' '. join(sentence for sentence in summary)
-    keywords = "-".join([item for item in article.keywords])
+    keywords = article.keywords #"-".join([item for item in article.keywords])
     return {'title': article.title, 'keywords': keywords, 'summary': summary,
                       'full_text': text, 'meta_descr': article.meta_description, 'error': 'yahoo finance workaround'}
 
@@ -132,7 +132,7 @@ def articleInfo(file, url):
           if 'finance.yahoo.com' in article.url :
             return yahoo_get_text(article)
           else:
-            keywords = "-".join([item for item in article.keywords])
+            keywords = article.keywords #"-".join([item for item in article.keywords])
             return {'title': article.title, 'keywords' : keywords, 'summary' : article.summary, 'full_text' : article.text, 'meta_descr' : article.meta_description}
 
     except Exception as e:
@@ -214,7 +214,7 @@ def databaseCopy(file, client, df):
             bigquery.SchemaField("source", "STRING"),
             bigquery.SchemaField("title", "STRING"),
             bigquery.SchemaField("full_text", "STRING"),
-            bigquery.SchemaField("keywords", "STRING"),
+            bigquery.SchemaField("keywords", "ARRAY<STRING>"),
             bigquery.SchemaField("meta_descr", "STRING"),
             bigquery.SchemaField("summary", "STRING"),
             bigquery.SchemaField("error", "STRING"),
