@@ -104,7 +104,8 @@ def yahoo_get_text(article):
     summary = nlp.summarize(url=article.url, title=article.title, text=text, max_sents=5)
     # converts list into one paragraph
     summary = ' '. join(sentence for sentence in summary)
-    return {'title': article.title, 'keywords': article.keywords, 'summary': summary,
+    keywords = "-".join([item for item in article.keywords])
+    return {'title': article.title, 'keywords': keywords, 'summary': summary,
                       'full_text': text, 'meta descr': article.meta_description, 'error': 'yahoo finance workaround'}
 
 
@@ -131,7 +132,8 @@ def articleInfo(file, url):
           if 'finance.yahoo.com' in article.url :
             return yahoo_get_text(article)
           else:
-            return {'title': article.title, 'keywords' : article.keywords, 'summary' : article.summary, 'full_text' : article.text, 'meta_descr' : article.meta_description}
+            keywords = "-".join([item for item in article.keywords])
+            return {'title': article.title, 'keywords' : keywords, 'summary' : article.summary, 'full_text' : article.text, 'meta_descr' : article.meta_description}
 
     except Exception as e:
         print(article.url[8:40] + "... article skipped due to error: " + str(e)) #(%i out of %i)" % (i, len(list)))
@@ -212,7 +214,7 @@ def databaseCopy(file, client, df):
             bigquery.SchemaField("source", "STRING"),
             bigquery.SchemaField("title", "STRING"),
             bigquery.SchemaField("full_text", "STRING"),
-            bigquery.SchemaField("keywords", "STRUCT"),
+            bigquery.SchemaField("keywords", "STRING"),
             bigquery.SchemaField("meta_descr", "STRING"),
             bigquery.SchemaField("summary", "STRING"),
             bigquery.SchemaField("error", "STRING"),
@@ -307,6 +309,7 @@ def main():
     # creates dataframe
     df = createDF(file, tickerList, df, HEADERS, oldDf)
     print(df)
+    print(df['summary'])
 
     databaseCopy(file, client, df)
 
