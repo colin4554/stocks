@@ -57,7 +57,7 @@ def stopScrape(file, ticker, oldDf, HEADERS):
 
         # sorts dataframe
         oldDf['time'] = oldDf['time'].str.slice(start=0, stop=7)
-        oldDf['time'] = pd.to_datetime(oldDf['time'], format='%I:%M%p')
+        oldDf['time'] = pd.to_datetime(oldDf['time'], format='%I:%M%p').dt.time
 
         oldDf = oldDf.sort_values(by=['date', 'time'], ascending=[False, False])
 
@@ -66,10 +66,6 @@ def stopScrape(file, ticker, oldDf, HEADERS):
         date = datetime.strptime(date, '%b-%d-%y')
 
         time = oldDf['time'].iloc[0]
-        print(time)
-        time = datetime.fromtimestamp(time).time()
-
-
 
         # time = str(oldDf[oldDf['ticker'] == ticker]['time'].iloc[0])
         # if time[-1] != "M":
