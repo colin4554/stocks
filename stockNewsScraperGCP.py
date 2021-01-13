@@ -91,11 +91,11 @@ def stopScrape(file, ticker, oldDf, HEADERS):
             scrapeDate = datetime.combine(date2, time2)
 
             if scrapeDate - trueDate <= timedelta(0):
-                message = ticker + ': previous date: %s scraped date: %s, scrape will stop at index %i' % (trueDate, scrapeDate, i + 1)
+                message = ticker + ': previous date: %s scraped date: %s, scrape will stop at index %i' % (trueDate, scrapeDate, i)
                 print(message)
                 file.write("\n" + message)
-                # buffer of one adds a duplicate
-                return i + 1
+                # where to stop (includes buffer of 1, ex: 0)
+                return i
     except Exception as e:
         print("error occurred with stop scrape function " + str(e))
     # if no match, scrape everything
