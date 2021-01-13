@@ -337,12 +337,12 @@ df = pd.read_csv('S&P500.csv')
 df = df.sort_values(by=['newsDateLength'], ascending=[False])
 
 # first 30 tickers worked, so starting after
-tickerList = df['ticker'][30:].tolist()
+tickerList = df['ticker'][50:].tolist()
 
 i = 0
 while i < len(tickerList):
     try:
-        tempTickers = tickerList[i : i+10]
+        tempTickers = tickerList[i:i+10]
         i += 10
         main(tempTickers)
     except Exception as e:
