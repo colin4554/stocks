@@ -315,8 +315,8 @@ def main(tickerList):
     # tickerList = ['AMZN']
     # tickerList = getTickerList(oldDf)
 
-    file.write(str(len(tickerList)) + " tickers for today's scraping: " + str(tickerList))
-    print(str(len(tickerList)) + " tickers for today's scraping: " + str(tickerList))
+    file.write(str(len(tickerList)) + " tickers for current scraping: " + str(tickerList))
+    print(str(len(tickerList)) + " tickers for current scraping: " + str(tickerList))
 
     # creates dataframe
     df = createDF(file, tickerList, df, HEADERS, oldDf)
@@ -335,13 +335,18 @@ def main(tickerList):
 
 df = pd.read_csv('S&P500.csv')
 df = df.sort_values(by=['newsDateLength'], ascending=[False])
-tickerList = df['ticker'].tolist()
+
+# first 30 tickers worked, so starting after
+tickerList = df['ticker'][30:].tolist()
 
 i = 0
 while i < len(tickerList):
-    tempTickers = tickerList[i : i+10]
-    i += 10
-    main(tempTickers)
+    try:
+        tempTickers = tickerList[i : i+10]
+        i += 10
+        main(tempTickers)
+    except Exception as e:
+        print("Error occurred at highest abstraction: " + str(e))
 
 # schedule.every(2).seconds.do(job)
 #
