@@ -41,10 +41,14 @@
 import pandas as pd
 df = pd.read_csv('S&P500.csv')
 df = df.sort_values(by=['newsDateLength'], ascending=[False])
-tickerList = df['ticker']
+tickerList = df['ticker'].tolist()
 
 i = 0
 while i < len(tickerList):
-    tempTickers = tickerList[i, i+10]
+    tempTickers = tickerList[i: i+10]
     i += 10
-    main(tempTickers)
+    for ticker in tempTickers:
+        print(ticker)
+        #print(tempTickers.get_loc(ticker))
+        print(tempTickers.index(ticker))
+        print(ticker + " (" + str(tempTickers.index(ticker) + 1) + "/" + str(len(tempTickers)) + "): ")# + str(i) + "/100\t" + str(nextTime - startTime) + " elapsed")

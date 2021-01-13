@@ -179,7 +179,7 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
                 nextTime = datetime.strptime(datetime.now().strftime('%H:%M:%S'), '%H:%M:%S')
                 print(ticker)
                 print(ticker + " (" + str(tickerlist.index(ticker) + 1) + "/" + str(len(tickerlist)) + "): " + str(i) + "/100\t" + str(nextTime - startTime) + " elapsed")
-                time.sleep(.5)
+                time.sleep(1)
 
             if len(table_row.td.text.split()) == 1:
                 row = {**{'ticker': ticker, 'time': table_row.td.text, 'link': url, 'source': table_row.span.text[1:],
@@ -335,7 +335,7 @@ def main(tickerList):
 
 df = pd.read_csv('S&P500.csv')
 df = df.sort_values(by=['newsDateLength'], ascending=[False])
-tickerList = df['ticker']
+tickerList = df['ticker'].tolist()
 
 i = 0
 while i < len(tickerList):
