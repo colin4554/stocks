@@ -287,7 +287,7 @@ def getTickerList(oldDf):
 
 # --- Main Execution --- #
 
-def main():
+def main(tickerList):
     # client = bigquery.Client()
     # big query client, need to include authorization
     client = bigquery.Client.from_service_account_json("api-auth.json")
@@ -295,7 +295,8 @@ def main():
     # file to log errors (w - write, a - append)
     file = open("recordsGCP.txt", "a")
 
-    file.write("\n" + str(datetime.now().date()) + " (" + str(datetime.now().time().replace(microsecond=0)) + "):")
+
+    file.write("\n" + str(datetime.now(pytz.timezone('US/Central')).date()) + " (" + str(datetime.now().time().replace(microsecond=0)) + "):\n")
 
     # header for newspaper
     HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
@@ -311,7 +312,7 @@ def main():
 
     # tickerList = ['AAPL', 'AMZN', 'GOOG', 'FB', 'MSFT', 'CRM']
     # tickerList = ['AMZN']
-    tickerList = getTickerList(oldDf)
+    # tickerList = getTickerList(oldDf)
 
     file.write(str(len(tickerList)) + " tickers for today's scraping: " + str(tickerList))
     print(str(len(tickerList)) + " tickers for today's scraping: " + str(tickerList))
@@ -329,23 +330,32 @@ def main():
     file.close()
 
 
-main()
+# initial setup, scrapes all tickers in batches of 10.  Hopefully I can examine any errors later, and use the getTickerList function to patch any up
+
+df = pd.read_csv('S&P500.csv')
+df = df.sort_values(by=['newsDateLength'], ascending=[False])
+tickerList = df['ticker']
+
+i = 0
+while i < len(tickerList):
+    tempTickers = tickerList[i, i+10]
+    i += 10
+    main(tempTickers)
 
 # schedule.every(2).seconds.do(job)
 #
 # weekday schedule
 
-schedule.every().tuesday.at("22:05").do(main)
-
-
-schedule.every().monday.at("08:30").do(main)
-schedule.every().tuesday.at("08:30").do(main)
-schedule.every().wednesday.at("08:30").do(main)
-schedule.every().thursday.at("08:30").do(main)
-schedule.every().friday.at("08:30").do(main)
-
-
-while True:
-    schedule.run_pending()
-    # 30 second sleep
-    time.sleep(30)
+#
+#
+# schedule.every().monday.at("08:30").do(main)
+# schedule.every().tuesday.at("08:30").do(main)
+# schedule.every().wednesday.at("08:30").do(main)
+# schedule.every().thursday.at("08:30").do(main)
+# schedule.every().friday.at("08:30").do(main)
+#
+#
+# while True:
+#     schedule.run_pending()
+#     # 30 second sleep
+#     time.sleep(30)
