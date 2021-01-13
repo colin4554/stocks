@@ -152,7 +152,7 @@ def articleInfo(file, url):
 def createDF(file, tickerlist, df, HEADERS, oldDf):
     startTime = datetime.strptime(datetime.now().strftime('%H:%M:%S'), '%H:%M:%S')
     for ticker in tickerlist:
-        time.sleep(1)
+        time.sleep(5)
 
         # creates url
         url = 'https://finviz.com/quote.ashx?t=' + ticker
@@ -310,8 +310,8 @@ def main():
         oldDf = []
 
     # tickerList = ['AAPL', 'AMZN', 'GOOG', 'FB', 'MSFT', 'CRM']
-    tickerList = ['AMZN']
-    # tickerList = getTickerList(oldDf)
+    # tickerList = ['AMZN']
+    tickerList = getTickerList(oldDf)
 
     file.write(str(len(tickerList)) + " tickers for today's scraping: " + str(tickerList))
     print(str(len(tickerList)) + " tickers for today's scraping: " + str(tickerList))
@@ -330,3 +330,22 @@ def main():
 
 
 main()
+
+# schedule.every(2).seconds.do(job)
+#
+# weekday schedule
+
+schedule.every().tuesday.at("22:05").do(main)
+
+
+schedule.every().monday.at("08:30").do(main)
+schedule.every().tuesday.at("08:30").do(main)
+schedule.every().wednesday.at("08:30").do(main)
+schedule.every().thursday.at("08:30").do(main)
+schedule.every().friday.at("08:30").do(main)
+
+
+while True:
+    schedule.run_pending()
+    # 30 second sleep
+    time.sleep(30)
