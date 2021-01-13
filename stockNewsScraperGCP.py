@@ -338,7 +338,7 @@ tickerList = df['ticker']
 
 i = 0
 while i < len(tickerList):
-    tempTickers = tickerList[i, i+10]
+    tempTickers = tickerList[i : i+10]
     i += 10
     main(tempTickers)
 
