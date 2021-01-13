@@ -177,6 +177,7 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
             # shows progress to user
             if i % 20 == 0:
                 nextTime = datetime.strptime(datetime.now().strftime('%H:%M:%S'), '%H:%M:%S')
+                print(ticker)
                 print(ticker + " (" + str(tickerlist.index(ticker) + 1) + "/" + str(len(tickerlist)) + "): " + str(i) + "/100\t" + str(nextTime - startTime) + " elapsed")
                 time.sleep(.5)
 
