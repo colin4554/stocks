@@ -179,6 +179,7 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
                 nextTime = datetime.strptime(datetime.now().strftime('%H:%M:%S'), '%H:%M:%S')
 
                 print(ticker + " (" + str(tickerlist.index(ticker) + 1) + "/" + str(len(tickerlist)) + "): " + str(i) + "/100\t" + str(nextTime - startTime) + " elapsed")
+                file.write(ticker + " (" + str(tickerlist.index(ticker) + 1) + "/" + str(len(tickerlist)) + "): " + str(i) + "/100\t" + str(nextTime - startTime) + " elapsed")
                 time.sleep(1)
 
             if len(table_row.td.text.split()) == 1:
@@ -288,7 +289,7 @@ def getTickerList(oldDf):
 
 # --- Main Execution --- #
 
-def main(tickerList):
+def main(tickerList, oldDf):
     # client = bigquery.Client()
     # big query client, need to include authorization
     client = bigquery.Client.from_service_account_json("api-auth.json")
@@ -305,11 +306,13 @@ def main(tickerList):
     # don't need to declare all columns for it to populate them
     df = pd.DataFrame(columns=['ticker', 'date', 'time', 'link', 'source', 'title'])
 
-    try:
-        oldDf = databaseRead(client)
-    except:
-        print("databaseRead failed: data does not exist")
-        oldDf = []
+    # reduce cost by only reading once
+
+    # try:
+    #     oldDf = databaseRead(client)
+    # except:
+    #     print("databaseRead failed: data does not exist")
+    #     oldDf = []
 
     # tickerList = ['AAPL', 'AMZN', 'GOOG', 'FB', 'MSFT', 'CRM']
     # tickerList = ['AMZN']
@@ -325,8 +328,9 @@ def main(tickerList):
 
     databaseCopy(file, client, df)
 
-    df = databaseRead(client)
-    print(df)
+    # unnecessary and adds to computational cost
+    #df = databaseRead(client)
+    #print(df)
     file.write("\nRun Ended\n")
     file.close()
 
@@ -336,15 +340,19 @@ def main(tickerList):
 df = pd.read_csv('S&P500.csv')
 df = df.sort_values(by=['newsDateLength'], ascending=[False])
 
-# first 30 tickers worked, so starting after
-tickerList = df['ticker'][60:].tolist()
+# first 140 tickers worked, so starting after (first 60 killed due to OOM, those after had swap installed)
+tickerList = df['ticker'][140:].tolist()
+
+# read bigquery once
+client = bigquery.Client.from_service_account_json("api-auth.json")
+oldDf = databaseRead(client)
 
 i = 0
 while i < len(tickerList):
     try:
         tempTickers = tickerList[i:i+10]
         i += 10
-        main(tempTickers)
+        main(tempTickers, oldDf)
     except Exception as e:
         print("Error occurred at highest abstraction: " + str(e))
 
