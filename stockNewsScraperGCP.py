@@ -14,9 +14,16 @@ import schedule
 
 
 
-# Current Problems
+# TODO: Current Problems
+
+# Will incur a bigquery data loading cost after free trial
+# ^ could use Cloud Storage as intermediary to eliminate cost
+
 # Websites with some text, but most behind a paywall are still scraped
 # ^ so full text, summary, etc. is sparse, but we don't know which articles
+
+# redact sensitive information and make public on github
+# ^ will also need to clean up code and add things (initialize function, pipeline, etc.)
 
 
 
