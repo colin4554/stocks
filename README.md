@@ -18,6 +18,7 @@ A great way to collect data for investing, sentiment analysis, or other projects
 
 TODO:
 - anything listed in python
+- rss reader for edgar files (or any SEC filings)
 - make things into different scripts (initialization function when returned database is [], etc.)
 
 
