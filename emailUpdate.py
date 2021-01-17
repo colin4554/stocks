@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -92,7 +90,7 @@ def sendEmail(subject, message_text):
     except Exception as e:
         return 'An error occurred: %s' % e
 
-subject ='test'
+subject ='Stock Test'
 
 message_text = "the following tickers were scrape..."
 
