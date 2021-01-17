@@ -5,6 +5,7 @@ A great way to collect data for investing, sentiment analysis, or other projects
 - Scrape recent news articles for any ticker listed on finviz.com and store the title, full text, summary, keywords, and more!
 - Schedule your news scraping and use built in functions to only scrape new articles and based on the frequency of articles for that ticker
 - Get the current list of S&P 500 tickers by a simple scraping function
+- Email updates each time the scraper runs
 - Deploy the repository either locally or on Google Cloud Platform (for free!)
 
 ### Deploying locally

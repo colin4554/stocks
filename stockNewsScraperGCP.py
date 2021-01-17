@@ -48,6 +48,7 @@ from emailUpdate import sendEmail
 # reads old dataframe and takes most recent date and time scraped
 # then finds corresponding index to stop scraping at
 def stopScrape(file, ticker, oldDf, HEADERS):
+    global emailMessage
     try:
         # creates url
         url = 'https://finviz.com/quote.ashx?t=' + ticker
@@ -101,7 +102,8 @@ def stopScrape(file, ticker, oldDf, HEADERS):
             if scrapeDate - trueDate <= timedelta(0):
                 message = ticker + ': previous date: %s scraped date: %s, scrape will stop at index %i' % (trueDate, scrapeDate, i)
                 print(message)
-                file.write("\n" + message)
+                file.write("\n\n" + message)
+                emailMessage == "\n" + message
                 # where to stop (includes buffer of 1, ex: 0)
                 return i
     except Exception as e:
@@ -364,19 +366,19 @@ def main():
     file.close()
     emailMessage += runEndMessage
 
+def run():
+    global emailMessage
+    emailMessage = ""
+    main()
+    subject = "GCP Stock News Scraping Update"
+    print(sendEmail(subject, emailMessage))
 
-global emailMessage
-emailMessage = ""
-main()
-subject = "GCP Stock News Scraping Update"
-print(sendEmail(subject, emailMessage))
 
-
-
-# initial setup, scrapes all tickers in batches of 10.  Hopefully I can examine any errors later, and use the getTickerList function to patch any up
 
 
 ### ------------------ Initialization Scipt ------------------ ###
+
+# initial setup, scrapes all tickers in batches of 10.  Hopefully I can examine any errors later, and use the getTickerList function to patch any up
 
 # df = pd.read_csv('S&P500.csv')
 # df = df.sort_values(by=['newsDateLength'], ascending=[False])
@@ -401,20 +403,19 @@ print(sendEmail(subject, emailMessage))
 ### ------------------ Scheduling ------------------ ###
 
 
-# schedule.every(2).seconds.do(job)
-#
+schedule.every(2).seconds.do(run)
+
+
 # weekday schedule
 
-#
-#
-# schedule.every().monday.at("08:30").do(main)
-# schedule.every().tuesday.at("08:30").do(main)
-# schedule.every().wednesday.at("08:30").do(main)
-# schedule.every().thursday.at("08:30").do(main)
-# schedule.every().friday.at("08:30").do(main)
-#
-#
-# while True:
-#     schedule.run_pending()
-#     # 30 second sleep
-#     time.sleep(30)
+schedule.every().monday.at("08:30").do(run)
+schedule.every().tuesday.at("08:30").do(run)
+schedule.every().wednesday.at("08:30").do(run)
+schedule.every().thursday.at("08:30").do(run)
+schedule.every().friday.at("08:30").do(run)
+
+
+while True:
+    schedule.run_pending()
+    # 30 second sleep
+    time.sleep(30)
