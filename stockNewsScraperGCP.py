@@ -63,9 +63,7 @@ def stopScrape(file, ticker, oldDf, HEADERS):
         # copy is needed to avoid copy of slice error (SettingWithCopyWarning)
         oldDf = oldDf[oldDf['ticker'] == ticker].copy()
 
-        # TODO: Error received for "value trying to be set on copy of a slice...."
         # sorts dataframe
-        # oldDf['time'] = oldDf['time'].str.slice(start=0, stop=7)
         oldDf['time'] = oldDf['time'].str[0:7]
         oldDf['time'] = pd.to_datetime(oldDf['time'], format='%I:%M%p').dt.time
 
@@ -192,7 +190,7 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
                 tickerMessage = ticker + " (" + str(tickerlist.index(ticker) + 1) + "/" + str(len(tickerlist)) + "): " + str(i) + "/100\t" + str(nextTime - startTime) + " elapsed"
                 print(tickerMessage)
                 file.write(tickerMessage)
-                emailMessage += "/n" + tickerMessage
+                emailMessage += "\n" + tickerMessage
                 time.sleep(1)
 
             if len(table_row.td.text.split()) == 1:
@@ -206,7 +204,7 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
 
             if i == stopIndex:
                 print(ticker + ": scrape stopped at %i" % stopIndex)
-                emailMessage += "/n" + ticker + ": scrape stopped at %i" % stopIndex
+                emailMessage += "\n" + ticker + ": scrape stopped at %i" % stopIndex
                 break
 
 
@@ -348,7 +346,7 @@ def main():
     tickerListMessage = str(len(tickerList)) + " tickers for current scraping: " + str(tickerList)
     file.write(tickerListMessage)
     print(tickerListMessage)
-    emailMessage += "/n" + tickerListMessage
+    emailMessage += "\n" + tickerListMessage
 
     # creates dataframe
     df = createDF(file, tickerList, df, HEADERS, oldDf)
