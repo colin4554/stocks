@@ -103,7 +103,7 @@ def stopScrape(file, ticker, oldDf, HEADERS):
                 message = ticker + ': previous date: %s scraped date: %s, scrape will stop at index %i' % (trueDate, scrapeDate, i)
                 print(message)
                 file.write("\n\n" + message)
-                emailMessage == "\n" + message
+                emailMessage += "\n" + message
                 # where to stop (includes buffer of 1, ex: 0)
                 return i
     except Exception as e:
@@ -341,8 +341,8 @@ def main():
         oldDf = []
 
     # tickerList = ['AAPL', 'AMZN', 'GOOG', 'FB', 'MSFT', 'CRM']
-    tickerList = ['GOOGL']
-    # tickerList = getTickerList(oldDf)
+    # tickerList = ['GOOGL']
+    tickerList = getTickerList(oldDf)
 
 
     tickerListMessage = str(len(tickerList)) + " tickers for current scraping: " + str(tickerList)
@@ -403,7 +403,7 @@ def run():
 ### ------------------ Scheduling ------------------ ###
 
 
-schedule.every(2).seconds.do(run)
+# schedule.every(2).seconds.do(run)
 
 
 # weekday schedule
