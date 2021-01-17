@@ -60,7 +60,8 @@ def stopScrape(file, ticker, oldDf, HEADERS):
         # splits based on tag for each row of news
         news_tr = news_table.findAll('tr')
 
-        oldDf = oldDf.loc[oldDf['ticker'] == ticker]
+        # copy is needed to avoid copy of slice error (SettingWithCopyWarning)
+        oldDf = oldDf[oldDf['ticker'] == ticker].copy()
 
         # TODO: Error received for "value trying to be set on copy of a slice...."
         # sorts dataframe
