@@ -26,3 +26,8 @@ TODO:
 Note:  uninstall pyarrow, install, pyarrow, install bigquery-storage-..., and the problem I faced worked!
 
 More details to follow...
+
+deleted from requirements.txt:
+
+`grpcio==1.34.0
+grpcio-tools==1.34.0`
