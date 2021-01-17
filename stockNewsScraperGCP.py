@@ -65,7 +65,7 @@ def stopScrape(file, ticker, oldDf, HEADERS):
         # TODO: Error received for "value trying to be set on copy of a slice...."
         # sorts dataframe
         # oldDf['time'] = oldDf['time'].str.slice(start=0, stop=7)
-        oldDf['time'] = oldDf['time'].str[:-2]
+        oldDf['time'] = oldDf['time'].str[0:7]
         oldDf['time'] = pd.to_datetime(oldDf['time'], format='%I:%M%p').dt.time
 
         oldDf = oldDf.sort_values(by=['date', 'time'], ascending=[False, False])
