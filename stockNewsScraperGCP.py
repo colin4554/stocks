@@ -189,7 +189,7 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
                 tickerMessage = ticker + " (" + str(tickerlist.index(ticker) + 1) + "/" + str(len(tickerlist)) + "): " + str(i) + "/100\t" + str(nextTime - startTime) + " elapsed"
                 print(tickerMessage)
                 file.write(tickerMessage)
-                emailMessage += tickerMessage
+                emailMessage += "/n" + tickerMessage
                 time.sleep(1)
 
             if len(table_row.td.text.split()) == 1:
@@ -203,7 +203,7 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
 
             if i == stopIndex:
                 print(ticker + ": scrape stopped at %i" % stopIndex)
-                emailMessage += ticker + ": scrape stopped at %i" % stopIndex
+                emailMessage += "/n" + ticker + ": scrape stopped at %i" % stopIndex
                 break
 
 
@@ -216,6 +216,7 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
 
 # function to put data into postgresql database
 def databaseCopy(file, client, df):
+    global emailMessage
     # create_engine('Database Dialect://Username:Password@Server/Name of Database)
     try:
 
@@ -254,8 +255,10 @@ def databaseCopy(file, client, df):
     except Exception as e:
         print("Error occurred when copying df to big query: " + str(e))
         file.write("\n" + str(datetime.now().replace(microsecond=0)) + ' databaseCopy Error: ' + str(e))
+        emailMessage += "\n" + str(datetime.now().replace(microsecond=0)) + ' databaseCopy Error: ' + str(e)
     else:
         print("df has been appended successfully.")
+        emailMessage += "\ndf has been appended successfully."
 
 
 def databaseRead(client):
@@ -311,7 +314,7 @@ def main():
     file = open("recordsGCP.txt", "a")
 
 
-    dateStartMessage = "\n" + str(datetime.now(pytz.timezone('US/Central')).date()) + " (" + str(datetime.now().time().replace(microsecond=0)) + "):\n"
+    dateStartMessage = "\n" + str(datetime.now(pytz.timezone('US/Central')).date()) + " (" + str(datetime.now(pytz.timezone('US/Central')).time().replace(microsecond=0)) + "):\n"
     file.write(dateStartMessage)
     global emailMessage
     emailMessage += dateStartMessage
@@ -337,7 +340,7 @@ def main():
     tickerListMessage = str(len(tickerList)) + " tickers for current scraping: " + str(tickerList)
     file.write(tickerListMessage)
     print(tickerListMessage)
-    emailMessage += tickerListMessage
+    emailMessage += "/n" + tickerListMessage
 
     # creates dataframe
     df = createDF(file, tickerList, df, HEADERS, oldDf)
@@ -349,7 +352,7 @@ def main():
     # unnecessary and adds to computational cost
     #df = databaseRead(client)
     #print(df)
-    runEndMessage = "\nRun Ended\n" + str(datetime.now(pytz.timezone('US/Central')).date()) + " (" + str(datetime.now().time().replace(microsecond=0)) + ")"
+    runEndMessage = "\nRun Ended: " + str(datetime.now(pytz.timezone('US/Central')).date()) + " (" + str(datetime.now(pytz.timezone('US/Central')).time().replace(microsecond=0)) + ")\n"
     file.write(runEndMessage)
     file.close()
     emailMessage += runEndMessage
