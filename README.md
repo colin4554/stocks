@@ -27,6 +27,12 @@ Note:  uninstall pyarrow, install, pyarrow, install bigquery-storage-..., and th
 
 More details to follow...
 
+
+grpcio troubleshooting:
+1 person said one dependency might be installing an old version
+so try `pip install grpcio` first, and then install requirements.txt
+
+(below) didn't really work
 deleted from requirements.txt:
 
 `grpcio==1.34.0

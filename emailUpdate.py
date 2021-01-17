@@ -55,7 +55,6 @@ def create_message(subject, message_text):
   message['to'] = 'colin.flueck@gmail.com'
   message['from'] = 'GCP Stock News Scraper Bot'
   message['subject'] = subject
-  print(message)
   return {'raw': base64.urlsafe_b64encode(message.as_string().encode()).decode()}
 
 
@@ -86,7 +85,7 @@ def sendEmail(subject, message_text):
         creds = authorizeCreds()
         email = create_message(subject, message_text)
         send_message(creds, email)
-        return "email sent successfully"
+        return "Email Message sent successfully"
     except Exception as e:
         return 'An error occurred: %s' % e
 
