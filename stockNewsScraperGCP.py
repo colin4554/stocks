@@ -302,7 +302,7 @@ def getTickerList(oldDf):
 
 # email message update body text
 
-def main(tickerList, oldDf):
+def main():
     # client = bigquery.Client()
     # big query client, need to include authorization
     client = bigquery.Client.from_service_account_json("api-auth.json")
@@ -359,7 +359,7 @@ global emailMessage
 emailMessage = ""
 main()
 subject = str(datetime.now(pytz.timezone('US/Central')).date()) + " GCP Stock News Scraping Update"
-sendEmail(subject, emailMessage)
+print(sendEmail(subject, emailMessage))
 
 
 

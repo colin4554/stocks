@@ -90,8 +90,8 @@ def sendEmail(subject, message_text):
     except Exception as e:
         return 'An error occurred: %s' % e
 
-subject ='Stock Test'
-
-message_text = "the following tickers were scrape..."
-
-print(sendEmail(subject, message_text))
+# subject ='Stock Test'
+#
+# message_text = "the following tickers were scrape..."
+#
+# print(sendEmail(subject, message_text))
