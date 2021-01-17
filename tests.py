@@ -52,3 +52,10 @@ while i < len(tickerList):
         #print(tempTickers.get_loc(ticker))
         print(tempTickers.index(ticker))
         print(ticker + " (" + str(tempTickers.index(ticker) + 1) + "/" + str(len(tempTickers)) + "): ")# + str(i) + "/100\t" + str(nextTime - startTime) + " elapsed")
+
+# from datetime import datetime
+# import pytz
+#
+# runEndMessage = "\nRun Ended: " + str(datetime.now(pytz.timezone('US/Central')).date()) + " (" + str(
+#     datetime.now(pytz.timezone('US/Central')).time().replace(microsecond=0).strftime("%I:%M %p")) + ")\n"
+# print(runEndMessage)

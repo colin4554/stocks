@@ -62,6 +62,7 @@ def stopScrape(file, ticker, oldDf, HEADERS):
 
         oldDf = oldDf[oldDf['ticker'] == ticker]
 
+        # TODO: Error received for "value trying to be set on copy of a slice...."
         # sorts dataframe
         oldDf['time'] = oldDf['time'].str.slice(start=0, stop=7)
         oldDf['time'] = pd.to_datetime(oldDf['time'], format='%I:%M%p').dt.time
@@ -314,7 +315,8 @@ def main():
     file = open("recordsGCP.txt", "a")
 
 
-    dateStartMessage = "\n" + str(datetime.now(pytz.timezone('US/Central')).date()) + " (" + str(datetime.now(pytz.timezone('US/Central')).time().replace(microsecond=0)) + "):\n"
+    dateStartMessage = "\n" + str(datetime.now(pytz.timezone('US/Central')).date()) + " (" + str(
+        datetime.now(pytz.timezone('US/Central')).time().replace(microsecond=0).strftime("%I:%M %p")) + "):\n"
     file.write(dateStartMessage)
     global emailMessage
     emailMessage += dateStartMessage
@@ -352,7 +354,8 @@ def main():
     # unnecessary and adds to computational cost
     #df = databaseRead(client)
     #print(df)
-    runEndMessage = "\nRun Ended: " + str(datetime.now(pytz.timezone('US/Central')).date()) + " (" + str(datetime.now(pytz.timezone('US/Central')).time().replace(microsecond=0)) + ")\n"
+    runEndMessage = "\nRun Ended: " + str(datetime.now(pytz.timezone('US/Central')).date()) + " (" + str(
+        datetime.now(pytz.timezone('US/Central')).time().replace(microsecond=0).strftime("%I:%M %p")) + ")\n"
     file.write(runEndMessage)
     file.close()
     emailMessage += runEndMessage
@@ -361,7 +364,7 @@ def main():
 global emailMessage
 emailMessage = ""
 main()
-subject = str(datetime.now(pytz.timezone('US/Central')).date()) + " GCP Stock News Scraping Update"
+subject = "GCP Stock News Scraping Update"
 print(sendEmail(subject, emailMessage))
 
 
