@@ -8,10 +8,10 @@ from bs4 import BeautifulSoup
 import nltk
 from datetime import datetime, timedelta
 import pytz
-
 from google.cloud import bigquery
 import schedule
 
+from emailUpdate import sendEmail
 
 
 # TODO: Current Problems
@@ -185,8 +185,11 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
             if i % 20 == 0:
                 nextTime = datetime.strptime(datetime.now().strftime('%H:%M:%S'), '%H:%M:%S')
 
-                print(ticker + " (" + str(tickerlist.index(ticker) + 1) + "/" + str(len(tickerlist)) + "): " + str(i) + "/100\t" + str(nextTime - startTime) + " elapsed")
-                file.write(ticker + " (" + str(tickerlist.index(ticker) + 1) + "/" + str(len(tickerlist)) + "): " + str(i) + "/100\t" + str(nextTime - startTime) + " elapsed")
+                tickerMessage = ticker + " (" + str(tickerlist.index(ticker) + 1) + "/" + str(len(tickerlist)) + "): " + str(i) + "/100\t" + str(nextTime - startTime) + " elapsed"
+                print(tickerMessage)
+                file.write(tickerMessage)
+                global emailMessage
+                emailMessage += tickerMessage
                 time.sleep(1)
 
             if len(table_row.td.text.split()) == 1:
@@ -200,6 +203,8 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
 
             if i == stopIndex:
                 print(ticker + ": scrape stopped at %i" % stopIndex)
+                global emailMessage
+                emailMessage += ticker + ": scrape stopped at %i" % stopIndex
                 break
 
 
@@ -296,6 +301,8 @@ def getTickerList(oldDf):
 
 # --- Main Execution --- #
 
+# email message update body text
+
 def main(tickerList, oldDf):
     # client = bigquery.Client()
     # big query client, need to include authorization
@@ -305,7 +312,10 @@ def main(tickerList, oldDf):
     file = open("recordsGCP.txt", "a")
 
 
-    file.write("\n" + str(datetime.now(pytz.timezone('US/Central')).date()) + " (" + str(datetime.now().time().replace(microsecond=0)) + "):\n")
+    dateStartMessage = "\n" + str(datetime.now(pytz.timezone('US/Central')).date()) + " (" + str(datetime.now().time().replace(microsecond=0)) + "):\n"
+    file.write(dateStartMessage)
+    global emailMessage
+    emailMessage += dateStartMessage
 
     # header for newspaper
     HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
@@ -314,19 +324,22 @@ def main(tickerList, oldDf):
     df = pd.DataFrame(columns=['ticker', 'date', 'time', 'link', 'source', 'title'])
 
     # reduce cost by only reading once
-
-    # try:
-    #     oldDf = databaseRead(client)
-    # except:
-    #     print("databaseRead failed: data does not exist")
-    #     oldDf = []
+    try:
+        oldDf = databaseRead(client)
+    except:
+        print("databaseRead failed: data does not exist")
+        oldDf = []
 
     # tickerList = ['AAPL', 'AMZN', 'GOOG', 'FB', 'MSFT', 'CRM']
-    # tickerList = ['AMZN']
+    tickerList = ['GOOG']
     # tickerList = getTickerList(oldDf)
 
-    file.write(str(len(tickerList)) + " tickers for current scraping: " + str(tickerList))
-    print(str(len(tickerList)) + " tickers for current scraping: " + str(tickerList))
+
+    tickerListMessage = str(len(tickerList)) + " tickers for current scraping: " + str(tickerList)
+    file.write(tickerListMessage)
+    print(tickerListMessage)
+    global emailMessage
+    emailMessage += tickerListMessage
 
     # creates dataframe
     df = createDF(file, tickerList, df, HEADERS, oldDf)
@@ -338,30 +351,48 @@ def main(tickerList, oldDf):
     # unnecessary and adds to computational cost
     #df = databaseRead(client)
     #print(df)
-    file.write("\nRun Ended\n")
+    runEndMessage = "\nRun Ended\n" + str(datetime.now(pytz.timezone('US/Central')).date()) + " (" + str(datetime.now().time().replace(microsecond=0)) + ")"
+    file.write(runEndMessage)
     file.close()
+    global emailMessage
+    emailMessage += runEndMessage
+
+
+global emailMessage
+emailMessage = ""
+main()
+subject = str(datetime.now(pytz.timezone('US/Central')).date()) + " GCP Stock News Scraping Update"
+sendEmail(subject, emailMessage)
+
 
 
 # initial setup, scrapes all tickers in batches of 10.  Hopefully I can examine any errors later, and use the getTickerList function to patch any up
 
-df = pd.read_csv('S&P500.csv')
-df = df.sort_values(by=['newsDateLength'], ascending=[False])
 
-# first 140 tickers worked, so starting after (first 60 killed due to OOM, those after had swap installed)
-tickerList = df['ticker'][140:].tolist()
+### ------------------ Initialization Scipt ------------------ ###
 
-# read bigquery once
-client = bigquery.Client.from_service_account_json("api-auth.json")
-oldDf = databaseRead(client)
+# df = pd.read_csv('S&P500.csv')
+# df = df.sort_values(by=['newsDateLength'], ascending=[False])
+#
+# # first 140 tickers worked, so starting after (first 60 killed due to OOM, those after had swap installed)
+# tickerList = df['ticker'][140:].tolist()
+#
+# # read bigquery once
+# client = bigquery.Client.from_service_account_json("api-auth.json")
+# oldDf = databaseRead(client)
+#
+# i = 0
+# while i < len(tickerList):
+#     try:
+#         tempTickers = tickerList[i:i+10]
+#         i += 10
+#         main(tempTickers, oldDf)
+#     except Exception as e:
+#         print("Error occurred at highest abstraction: " + str(e))
 
-i = 0
-while i < len(tickerList):
-    try:
-        tempTickers = tickerList[i:i+10]
-        i += 10
-        main(tempTickers, oldDf)
-    except Exception as e:
-        print("Error occurred at highest abstraction: " + str(e))
+
+### ------------------ Scheduling ------------------ ###
+
 
 # schedule.every(2).seconds.do(job)
 #
