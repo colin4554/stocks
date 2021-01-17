@@ -276,7 +276,7 @@ def databaseRead(client):
     # return client.list_rows(table).to_dataframe()
 
     # saves data by not retrieving any unneccesary columns (1/300 cost)
-    return client.query("SELECT date, time, ticker FROM `the-utility-300815.stock_news.SP500`")
+    return client.query("SELECT date, time, ticker FROM `the-utility-300815.stock_news.SP500`").to_dataframe()
 
 def getTickerList(oldDf):
     tickerList = []
