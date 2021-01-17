@@ -158,6 +158,7 @@ def articleInfo(file, url):
 
 def createDF(file, tickerlist, df, HEADERS, oldDf):
     startTime = datetime.strptime(datetime.now().strftime('%H:%M:%S'), '%H:%M:%S')
+    global emailMessage
     for ticker in tickerlist:
         time.sleep(5)
 
@@ -188,7 +189,6 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
                 tickerMessage = ticker + " (" + str(tickerlist.index(ticker) + 1) + "/" + str(len(tickerlist)) + "): " + str(i) + "/100\t" + str(nextTime - startTime) + " elapsed"
                 print(tickerMessage)
                 file.write(tickerMessage)
-                global emailMessage
                 emailMessage += tickerMessage
                 time.sleep(1)
 
@@ -203,7 +203,6 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
 
             if i == stopIndex:
                 print(ticker + ": scrape stopped at %i" % stopIndex)
-                global emailMessage
                 emailMessage += ticker + ": scrape stopped at %i" % stopIndex
                 break
 
@@ -338,7 +337,6 @@ def main(tickerList, oldDf):
     tickerListMessage = str(len(tickerList)) + " tickers for current scraping: " + str(tickerList)
     file.write(tickerListMessage)
     print(tickerListMessage)
-    global emailMessage
     emailMessage += tickerListMessage
 
     # creates dataframe
@@ -354,7 +352,6 @@ def main(tickerList, oldDf):
     runEndMessage = "\nRun Ended\n" + str(datetime.now(pytz.timezone('US/Central')).date()) + " (" + str(datetime.now().time().replace(microsecond=0)) + ")"
     file.write(runEndMessage)
     file.close()
-    global emailMessage
     emailMessage += runEndMessage
 
 
