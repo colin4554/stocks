@@ -215,7 +215,7 @@ def createDF(file, tickerlist, df, HEADERS, oldDf):
     return df
 
 
-# function to put data into postgresql database
+# function to put data into bigquery
 def databaseCopy(file, client, df):
     global emailMessage
     # create_engine('Database Dialect://Username:Password@Server/Name of Database)
@@ -270,9 +270,13 @@ def databaseRead(client):
     dataset_ref = bigquery.DatasetReference(project, dataset_id)
     table_ref = dataset_ref.table("SP500")
     table = client.get_table(table_ref)
+    # ^ just puts it together
 
     # returns entire database
-    return client.list_rows(table).to_dataframe()
+    # return client.list_rows(table).to_dataframe()
+
+    # saves data by not retrieving any unneccesary columns (1/300 cost)
+    return client.query("SELECT date, time, ticker FROM `the-utility-300815.stock_news.SP500`")
 
 def getTickerList(oldDf):
     tickerList = []
