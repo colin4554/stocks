@@ -33,6 +33,9 @@ grpcio troubleshooting:
 1 person said one dependency might be installing an old version
 so try `pip install grpcio` first, and then install requirements.txt
 
+1/17 - I install grpcio from source and it took forever (20-30 min), but then everything worked
+
+
 (below) didn't really work
 deleted from requirements.txt:
 

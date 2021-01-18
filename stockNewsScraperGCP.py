@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 import pytz
 from google.cloud import bigquery
 import schedule
+from icecream import ic
 
 from emailUpdate import sendEmail
 
@@ -65,10 +66,11 @@ def stopScrape(file, ticker, oldDf, HEADERS):
         oldDf = oldDf[oldDf['ticker'] == ticker].copy()
 
         # sorts dataframe
-        oldDf['time'] = oldDf['time'].str[0:7]
+        oldDf['time'] = ic(oldDf['time'].str[0:7])
         oldDf['time'] = pd.to_datetime(oldDf['time'], format='%I:%M%p').dt.time
 
         oldDf = oldDf.sort_values(by=['date', 'time'], ascending=[False, False])
+        ic(oldDf)
 
         # gets most recent date and time from last scrape
         date = oldDf['date'].iloc[0]
@@ -285,6 +287,7 @@ def getTickerList(oldDf):
     df = pd.read_csv('S&P500.csv')
     mainTickerList = [df['ticker'], df['newsDateLength']]
     oldDf = oldDf.sort_values(by=['date', 'time'], ascending=[False, False])
+    ic(oldDf)
 
     for i in range(len(mainTickerList[0])):
         ticker = mainTickerList[0][i]
@@ -295,16 +298,15 @@ def getTickerList(oldDf):
             tickerList += [ticker]
         else:
             # get last scraped date
-            date = oldDf[oldDf['ticker'] == ticker]['date'].iloc[0]
+            date = ic(oldDf[oldDf['ticker'] == ticker]['date']).iloc[0]
             date = datetime.strptime(date, '%b-%d-%y')
             dateDif = datetime.now() - date
             #print(ticker + " " + str(dateDif.days))
 
-            # if the number of days since last scraped is more than a 4th of the number of dates present, scrape again
+            # if the number of days since last scraped is greater than a 4th of the average number of dates on finviz for that ticker, scrape again
             if dateDif.days > length / 4:
                 tickerList += [ticker]
     return tickerList
-
 
 
 
