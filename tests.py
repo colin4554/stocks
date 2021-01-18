@@ -36,22 +36,56 @@
 # file.write("\n" + str(datetime.now().date()) + " ("  + str(datetime.now().time().replace(microsecond=0)) + "):")
 #
 
+from google.cloud import bigquery
 
+def databaseRead(client):
+
+    project = "the-utility-300815"
+    dataset_id = "stock_news"
+
+    dataset_ref = bigquery.DatasetReference(project, dataset_id)
+    table_ref = dataset_ref.table("SP500")
+    table = client.get_table(table_ref)
+    # ^ just puts it together
+
+    # returns entire database
+    # return client.list_rows(table).to_dataframe()
+
+    # saves data by not retrieving any unneccesary columns (1/300 cost)
+    return client.query("SELECT date, time, ticker FROM `the-utility-300815.stock_news.SP500`").to_dataframe()
 
 import pandas as pd
-df = pd.read_csv('S&P500.csv')
-df = df.sort_values(by=['newsDateLength'], ascending=[False])
-tickerList = df['ticker'].tolist()
+client = bigquery.Client.from_service_account_json("api-auth.json")
+oldDf = databaseRead(client)
 
-i = 0
-while i < len(tickerList):
-    tempTickers = tickerList[i: i+10]
-    i += 10
-    for ticker in tempTickers:
-        print(ticker)
-        #print(tempTickers.get_loc(ticker))
-        print(tempTickers.index(ticker))
-        print(ticker + " (" + str(tempTickers.index(ticker) + 1) + "/" + str(len(tempTickers)) + "): ")# + str(i) + "/100\t" + str(nextTime - startTime) + " elapsed")
+# sorts dataframe
+def sortOldDf(oldDf):
+    oldDf['time'] = oldDf['time'].str[0:7]
+    oldDf['time'] = pd.to_datetime(oldDf['time'], format='%I:%M%p').dt.time
+    oldDf['date'] = pd.to_datetime(oldDf['date'], format='%b-%d-%y').dt.date
+    oldDf = oldDf.sort_values(by=['date', 'time'], ascending=[False, False])
+    return oldDf
+
+oldDf = sortOldDf(oldDf)
+data = oldDf[oldDf['ticker'] == 'AMZN']
+print(data)
+
+
+
+# import pandas as pd
+# df = pd.read_csv('S&P500.csv')
+# df = df.sort_values(by=['newsDateLength'], ascending=[False])
+# tickerList = df['ticker'].tolist()
+#
+# i = 0
+# while i < len(tickerList):
+#     tempTickers = tickerList[i: i+10]
+#     i += 10
+#     for ticker in tempTickers:
+#         print(ticker)
+#         #print(tempTickers.get_loc(ticker))
+#         print(tempTickers.index(ticker))
+#         print(ticker + " (" + str(tempTickers.index(ticker) + 1) + "/" + str(len(tempTickers)) + "): ")# + str(i) + "/100\t" + str(nextTime - startTime) + " elapsed")
 
 # from datetime import datetime
 # import pytz
