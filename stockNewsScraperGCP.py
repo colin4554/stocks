@@ -286,6 +286,9 @@ def getTickerList(oldDf):
     tickerList = []
     df = pd.read_csv('S&P500.csv')
     mainTickerList = [df['ticker'], df['newsDateLength']]
+
+    mainTickerList = mainTickerList[0:10]
+
     oldDf = oldDf.sort_values(by=['date', 'time'], ascending=[False, False])
     ic(oldDf)
 
@@ -299,8 +302,10 @@ def getTickerList(oldDf):
         else:
             # get last scraped date
             date = ic(oldDf[oldDf['ticker'] == ticker]['date']).iloc[0]
+            ic(date)
             date = datetime.strptime(date, '%b-%d-%y')
-            dateDif = datetime.now() - date
+            ic(date)
+            dateDif = ic(datetime.now() - date)
             #print(ticker + " " + str(dateDif.days))
 
             # if the number of days since last scraped is greater than a 4th of the average number of dates on finviz for that ticker, scrape again
