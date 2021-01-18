@@ -291,8 +291,8 @@ def getTickerList(oldDf):
             tickerList += [ticker]
         else:
             # get last scraped date
-            date = ic(oldDf[oldDf['ticker'] == ticker]['date']).iloc[0]
-            dateDif = datetime.now() - date
+            date = oldDf[oldDf['ticker'] == ticker]['date'].iloc[0]
+            dateDif = datetime.now().date() - date
             #print(ticker + " " + str(dateDif.days))
 
             # if the number of days since last scraped is greater than a 4th of the average number of dates on finviz for that ticker, scrape again
