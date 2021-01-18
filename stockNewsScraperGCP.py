@@ -290,7 +290,9 @@ def getTickerList(oldDf):
     mainTickerList = mainTickerList[0:10]
 
     oldDf = oldDf.sort_values(by=['date', 'time'], ascending=[False, False])
-    ic(oldDf)
+    ic(oldDf.head(10))
+    ic(oldDf[40:60])
+    ic(oldDf.tail(10))
 
     for i in range(len(mainTickerList[0])):
         ticker = mainTickerList[0][i]
@@ -298,6 +300,7 @@ def getTickerList(oldDf):
 
         # if no record exists in database, add to scraping date
         if oldDf['ticker'][oldDf['ticker'] == ticker].sum() == 0:
+            ic("no records")
             tickerList += [ticker]
         else:
             # get last scraped date
