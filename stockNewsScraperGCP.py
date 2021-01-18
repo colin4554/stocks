@@ -369,7 +369,6 @@ def run():
     print(sendEmail(subject, emailMessage))
 
 
-run()
 
 ### ------------------ Initialization Scipt ------------------ ###
 
@@ -403,14 +402,14 @@ run()
 
 # weekday schedule
 
-# schedule.every().monday.at("08:30").do(run)
-# schedule.every().tuesday.at("08:30").do(run)
-# schedule.every().wednesday.at("08:30").do(run)
-# schedule.every().thursday.at("08:30").do(run)
-# schedule.every().friday.at("08:30").do(run)
-#
-#
-# while True:
-#     schedule.run_pending()
-#     # 30 second sleep
-#     time.sleep(30)
+schedule.every().monday.at("08:30").do(run)
+schedule.every().tuesday.at("08:30").do(run)
+schedule.every().wednesday.at("08:30").do(run)
+schedule.every().thursday.at("08:30").do(run)
+schedule.every().friday.at("08:30").do(run)
+
+
+while True:
+    schedule.run_pending()
+    # 30 second sleep
+    time.sleep(30)
