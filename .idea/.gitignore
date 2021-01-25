@@ -2,5 +2,9 @@
 /shelf/
 /workspace.xml
 /postgress_credentials.txt
+/all_GCP.log
+/recordsGCP.txt
+/records.txt
+/tests.py
 # do this for GCP? I just don't want it to get overwritten when I try to make code updates
 # /records.txt
