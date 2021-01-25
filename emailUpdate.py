@@ -8,23 +8,24 @@ import base64
 from email.mime.text import MIMEText
 
 
-# Define the SCOPES. If modifying it, delete the token.pickle file.
+# this scope allows us to send emails
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
 
 def authorizeCreds():
-    # Variable creds will store the user access token.
-    # If no valid token found, we will create one.
+    """Ensures user is authorized on this account
+
+    Returns:
+      Credentials
+    """
     creds = None
 
-    # The file token.pickle contains the user access token.
-    # Check if it exists
     if os.path.exists('token.pickle'):
-        # Read the token from the file and store it in the variable creds
+        # read the token from the file and store as creds
         with open('token.pickle', 'rb') as token:
             creds = pickle.load(token)
 
-            # If credentials are not available or are invalid, ask the user to log in.
+            # If credentials are not available or are invalid, ask the user to log in through browser
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
@@ -32,7 +33,7 @@ def authorizeCreds():
             flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
 
-            # Save the access token in token.pickle file for the next run
+            # saves creds so sign in isn't necessary next time
         with open('token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
@@ -40,16 +41,14 @@ def authorizeCreds():
 
 
 def create_message(subject, message_text):
-  """Create a message for an email.
+  """Create a message for an email
 
   Args:
-    sender: Email address of the sender.
-    to: Email address of the receiver.
-    subject: The subject of the email message.
-    message_text: The text of the email message.
+    subject: The subject of the email message
+    message_text: The text of the email message
 
   Returns:
-    An object containing a base64url encoded email object.
+    An object containing a base64url encoded email object
   """
   message = MIMEText(message_text)
   message['to'] = 'colin.flueck@gmail.com'
@@ -59,16 +58,14 @@ def create_message(subject, message_text):
 
 
 def send_message(creds, message):
-  """Send an email message.
+  """Send an email message
 
   Args:
-    service: Authorized Gmail API service instance.
-    user_id: User's email address. The special value "me"
-    can be used to indicate the authenticated user.
-    message: Message to be sent.
+    creds: Authorized Gmail API credentials
+    message: Message to be sent
 
   Returns:
-    Sent Message.
+    Nothing, but prints if message id if successful or error message if not
   """
   service = build('gmail', 'v1', credentials=creds)
 
@@ -76,11 +73,19 @@ def send_message(creds, message):
     message = (service.users().messages().send(userId='me', body=message)
                .execute())
     print('Message Id: %s' % message['id'])
-    return message
   except Exception as e:
     print('An error occurred: %s' % e)
 
-def sendEmail(subject, message_text):
+def send_email(subject, message_text):
+    """Compiles message, completes authorization, and sends email
+
+    Args:
+      subject: The subject of the email message
+      message_text: The text of the email message
+
+    Returns:
+      Success or error message
+    """
     try:
         creds = authorizeCreds()
         email = create_message(subject, message_text)
@@ -89,8 +94,11 @@ def sendEmail(subject, message_text):
     except Exception as e:
         return 'An error occurred: %s' % e
 
-# subject ='Stock Test'
-#
-# message_text = "the following tickers were scrape..."
-#
-# print(sendEmail(subject, message_text))
+
+# Allows this module to be run by itself, with user inputted subject and message
+if __name__ == "__main__":
+    subject = input('Enter the email\'s subject: ')
+
+    message_text = input('Enter the email\'s message: ')
+
+    print(send_email(subject, message_text))

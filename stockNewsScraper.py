@@ -36,7 +36,7 @@ import pytz
 
 
 # Function to speed up scraping and reduce duplicates
-# reads old dataframe and takes most recent date and time scraped
+# reads old DataFrame and takes most recent date and time scraped
 # then finds corresponding index to stop scraping at
 def stopScrape(ticker, oldDf, HEADERS):
     # creates url
@@ -153,7 +153,7 @@ def createDF(tickerlist, df, HEADERS):
         oldDf = sqlRead()
         stopIndex = stopScrape(ticker, oldDf, HEADERS)
 
-        # adds row to dataframe based on date/time
+        # adds row to DataFrame based on date/time
         for i, table_row in enumerate(news_tr):
             url = table_row.a['href']
             info = articleInfo(url)
@@ -272,7 +272,7 @@ print(str(len(tickerList)) + " tickers for today's scraping: " + tickerList)
 
 # change replace to append
 
-# creates dataframe
+# creates DataFrame
 df = createDF(tickerList, df, HEADERS)
 print(df)
 

@@ -4,47 +4,51 @@ import pandas as pd
 import time
 from datetime import datetime
 
+def finVizTable(ticker, HEADERS):
+    url = 'https://finviz.com/quote.ashx?t=' + ticker
+
+    # gets news data from table
+    req = requests.get(url, headers=HEADERS)
+    soup = BeautifulSoup(req.content, 'html.parser')
+    news_table = soup.find(id='news-table')
+
+    # splits based on tag for each row of news
+    return news_table.findAll('tr')
 
 
-df = pd.read_csv('S&P500.csv')
+if __name__ == "__main__":
 
-# I added BRK-A and BRK-B instead of just BRK
-mainTickerList = df['ticker']
-df['newsDateLength'] = ""
+    df = pd.read_csv('S&P500.csv')
 
-startTime = datetime.strptime(datetime.now().strftime('%H:%M:%S'), '%H:%M:%S')
+    # I added BRK-A and BRK-B instead of just BRK
+    mainTickerList = df['ticker']
+    df['newsDateLength'] = ""
 
-HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
+    startTime = datetime.strptime(datetime.now().strftime('%H:%M:%S'), '%H:%M:%S')
 
-for i, ticker in enumerate(mainTickerList):
+    HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 
-    try:
-        time.sleep(1)
+    for i, ticker in enumerate(mainTickerList):
 
-        # creates url
-        url = 'https://finviz.com/quote.ashx?t=' + ticker
+        try:
+            time.sleep(1)
 
-        # gets news data from table
-        req = requests.get(url, headers=HEADERS)
-        soup = BeautifulSoup(req.content, 'html.parser')
-        news_table = soup.find(id='news-table')
+            # creates url
+            newsTable = finVizTable(ticker, HEADERS)
 
-        # splits based on tag for each row of news
-        news_tr = news_table.findAll('tr')
+            dateList = []
+            # adds row to DataFrame based on date/time
+            for j, table_row in enumerate(newsTable):
+                if len(table_row.td.text.split()) != 1:
+                    date = datetime.strptime(table_row.td.text.split()[0], '%b-%d-%y').date()
+                    dateList += [date]
 
-        dateList = []
-        # adds row to dataframe based on date/time
-        for j, table_row in enumerate(news_tr):
-            if len(table_row.td.text.split()) != 1:
-                date = datetime.strptime(table_row.td.text.split()[0], '%b-%d-%y').date()
-                dateList += [date]
+            dif = dateList[0] - dateList[-1]
+            nextTime = datetime.strptime(datetime.now().strftime('%H:%M:%S'), '%H:%M:%S')
+            print("(" + str(i+1) + "/" + str(len(mainTickerList)) + ") " + ticker + ": " + str(dif.days) +"     \t" + str(nextTime - startTime) + " elapsed")
+            df['newsDateLength'].iloc[i] = dif.days
 
-        dif = dateList[0] - dateList[-1]
-        nextTime = datetime.strptime(datetime.now().strftime('%H:%M:%S'), '%H:%M:%S')
-        print("(" + str(i+1) + "/" + str(len(mainTickerList)) + ") " + ticker + ": " + str(dif.days) +"     \t" + str(nextTime - startTime) + " elapsed")
-        df['newsDateLength'].iloc[i] = dif.days
+        except Exception as e:
+            print("Error occured with " + ticker + ": " + str(e))
 
-    except Exception as e:
-        print("Error occured with " + ticker + ": " + str(e))
-
-df.to_csv('S&P500.csv', index=False)
+    df.to_csv('S&P500.csv', index=False)
