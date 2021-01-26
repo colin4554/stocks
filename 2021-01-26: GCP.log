@@ -1,0 +1,47 @@
+2021-01-26 (09:18 AM):
+
+database_read failed: data does not exist
+2021-01-26 (09:36 AM):
+
+database_read failed: data does not exist
+2021-01-26 (09:37 AM):
+
+database_read failed: data does not exist
+2021-01-26 (09:37 AM):
+
+database_read failed: data does not exist
+2021-01-26 (09:38 AM):
+
+database_read failed: data does not exist
+2021-01-26 (09:39 AM):
+
+database_read failed: data does not exist
+2021-01-26 (09:39 AM):
+
+database_read failed: data does not exist
+2021-01-26 (09:50 AM):
+
+database_read failed: data does not exist
+2021-01-26 (11:17 AM):
+
+database_read failed: data does not exist
+2021-01-26 (11:22 AM):
+
+2021-01-26 (11:22 AM):
+
+2021-01-26 (11:23 AM):
+
+2021-01-26 (11:23 AM):
+
+2021-01-26 (11:24 AM):
+
+2021-01-26 (11:24 AM):
+
+2021-01-26 (11:24 AM):
+
+2021-01-26 (11:25 AM):
+
+14 tickers for current scraping: ['AMZN', 'AAPL', 'T', 'BBY', 'BSX', 'CXO', 'FDX', 'F', 'GM', 'KR', 'RTX', 'RCL', 'TSLA', 'WBA']
+
+AMZN: previous date: 2021-01-25 17:08:00 scraped date: 2021-01-25 17:08:00, scrape will stop at index 25
+AMZN (1/14): 0/100	0:00:10 elapsed

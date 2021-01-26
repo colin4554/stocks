@@ -293,7 +293,8 @@ def database_read(client):
     # return client.list_rows(table).to_DataFrame()
 
     # saves data by not retrieving any unneccesary columns (1/300 cost)
-    return client.query("SELECT date, time, ticker FROM `the-utility-300815.stock_news.SP500`").to_DataFrame()
+    #'SELECT ticker, date, time FROM `the-utility-300815.stock_news.SP500`'
+    return client.query("SELECT date, time, ticker FROM `the-utility-300815.stock_news.SP500`").to_dataframe()
 
 
 def sort_old_df(old_df):
@@ -330,7 +331,7 @@ def get_ticker_list(old_df):
         length = main_ticker_list[1][i]
 
         # if no record exists in database, add to scraping list
-        if old_df[old_df['ticker'] == ticker].sum() == 0:
+        if old_df[old_df['ticker'] == ticker].empty:
             ticker_list += [ticker]
         else:
             # get last scraped date
@@ -381,6 +382,7 @@ def main():
     """
     # big query client, need to include authorization
     client = bigquery.Client.from_service_account_json("api-auth.json")
+
 
     # creates log file
     log_name = str(datetime.now().date()) + ": GCP.log"

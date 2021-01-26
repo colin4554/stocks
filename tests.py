@@ -96,31 +96,39 @@
 
 
 
-import logging
-from datetime import datetime
-import os
-from emailUpdate import send_email
+# import logging
+# from datetime import datetime
+# import os
+# from emailUpdate import send_email
+#
+#
+# from colorama import Back, Style, Fore
+# #logging.info(Fore.GREEN + 'Entering sweeper.py...' + Style.NORMAL)
+# log_name = str(datetime.now().date()) + ": GCP.log"
+# logging.basicConfig(level=logging.INFO,  handlers=[logging.FileHandler(log_name), logging.StreamHandler()], format='%(message)s')
+#
+#
+# logging.info("25 Tickers to scrape (aap, fffg, ddd)\n")
+#
+#
+#
+#
+# file = open(log_name, 'r')
+# message = file.read()
+# os.remove(log_name)
+#
+# send_email("logs test", message)
+#
+# file = open('all_GCP.log', 'a')
+# file.write(message)
+# file.close()
 
 
-from colorama import Back, Style, Fore
-#logging.info(Fore.GREEN + 'Entering sweeper.py...' + Style.NORMAL)
-log_name = str(datetime.now().date()) + ": GCP.log"
-logging.basicConfig(level=logging.INFO,  handlers=[logging.FileHandler(log_name), logging.StreamHandler()], format='%(message)s')
 
-
-logging.info("25 Tickers to scrape (aap, fffg, ddd)\n")
-
-
-
-
-file = open(log_name, 'r')
-message = file.read()
-os.remove(log_name)
-
-send_email("logs test", message)
-
-file = open('all_GCP.log', 'a')
-file.write(message)
-file.close()
+# from google.cloud import bigquery
+#
+# client = bigquery.Client.from_service_account_json("api-auth.json")
+# df = client.query("SELECT date, time, ticker FROM `the-utility-300815.stock_news.SP500`").to_dataframe()
+# print(df)
 
 
