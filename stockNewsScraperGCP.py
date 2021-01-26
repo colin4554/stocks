@@ -330,7 +330,7 @@ def get_ticker_list(old_df):
         length = main_ticker_list[1][i]
 
         # if no record exists in database, add to scraping list
-        if old_df['ticker'][old_df['ticker'] == ticker].sum() == 0:
+        if old_df[old_df['ticker'] == ticker].sum() == 0:
             ticker_list += [ticker]
         else:
             # get last scraped date
@@ -452,13 +452,13 @@ def main():
 
 # weekday schedule
 
-#main()
+main()
 
-schedule.every().monday.at("08:30").do(main)
-schedule.every().tuesday.at("08:30").do(main)
-schedule.every().wednesday.at("08:30").do(main)
-schedule.every().thursday.at("08:30").do(main)
-schedule.every().friday.at("08:30").do(main)
+# schedule.every().monday.at("08:30").do(main)
+# schedule.every().tuesday.at("08:30").do(main)
+# schedule.every().wednesday.at("08:30").do(main)
+# schedule.every().thursday.at("08:30").do(main)
+# schedule.every().friday.at("08:30").do(main)
 
 
 while True:
