@@ -55,16 +55,19 @@ def fin_viz_table(ticker):
     Returns:
         List of news article urls and date/times
     """
-    url = 'https://finviz.com/quote.ashx?t=' + ticker
+    try:
+        url = 'https://finviz.com/quote.ashx?t=' + ticker
 
-    # gets news data from table
-    req = requests.get(url, headers=HEADERS)
-    soup = BeautifulSoup(req.content, 'html.parser')
-    news_table = soup.find(id='news-table')
+        # gets news data from table
+        req = requests.get(url, headers=HEADERS)
+        soup = BeautifulSoup(req.content, 'html.parser')
+        news_table = soup.find(id='news-table')
 
-    # splits based on tag for each row of news
-    return news_table.findAll('tr')
-
+        # splits based on tag for each row of news
+        return news_table.findAll('tr')
+    except Exception as e:
+        logging.info(ticker + " " + str(e))
+        return []
 
 # Function to speed up scraping and reduce duplicates
 # reads old DataFrame and takes most recent date and time scraped

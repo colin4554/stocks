@@ -131,4 +131,13 @@
 # df = client.query("SELECT date, time, ticker FROM `the-utility-300815.stock_news.SP500`").to_dataframe()
 # print(df)
 
+for i, table_row in []:
+    print(i)
+    print(table_row)
 
+
+# removed from csv:
+'''
+CXO,Concho Resources,Energy,Oil & Gas Exploration & Production,2016-02-22,70
+TIF,Tiffany & Co.,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",2000-06-21,84
+'''
