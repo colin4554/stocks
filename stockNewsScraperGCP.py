@@ -267,7 +267,7 @@ def database_copy(client, df):
             bigquery.SchemaField("scrape_date", "STRING")
         ])
 
-        job = client.load_table_from_DataFrame(df, table_id, job_config=job_config)  # Make an API request.
+        job = client.load_table_from_dataframe(df, table_id, job_config=job_config)  # Make an API request.
         job.result()  # Wait for the job to complete.
         logging.info("df has been appended successfully.")
 
