@@ -413,7 +413,7 @@ def main():
 
     # creates DataFrame
     df = create_df(ticker_list, df, old_df)
-    logging.info(df.head())
+    logging.info(df)
 
     database_copy(client, df)
 
@@ -457,13 +457,13 @@ def main():
 
 # weekday schedule
 
-main()
+# main()
 
-# schedule.every().monday.at("08:30").do(main)
-# schedule.every().tuesday.at("08:30").do(main)
-# schedule.every().wednesday.at("08:30").do(main)
-# schedule.every().thursday.at("08:30").do(main)
-# schedule.every().friday.at("08:30").do(main)
+schedule.every().monday.at("08:30").do(main)
+schedule.every().tuesday.at("08:30").do(main)
+schedule.every().wednesday.at("08:30").do(main)
+schedule.every().thursday.at("08:30").do(main)
+schedule.every().friday.at("08:30").do(main)
 
 
 while True:

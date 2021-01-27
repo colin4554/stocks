@@ -1,1 +1,12 @@
 
+2021-01-26 (07:24 PM):
+
+0 tickers for current scraping: []
+
+Empty DataFrame
+Columns: [ticker, date, time, link, source, title, scrape_date]
+Index: []
+2021-01-26 19:25:02 database_copy Error: bq_schema contains fields not present in dataframe: {'keywords', 'full_text', 'summary', 'error', 'meta_descr'}
+
+Run Ended: 2021-01-26 (07:25 PM)
+
