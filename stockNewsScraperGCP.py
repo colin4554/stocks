@@ -396,7 +396,7 @@ def main():
         datetime.now(pytz.timezone('US/Central')).time().replace(microsecond=0).strftime("%I:%M %p")) + "):\n")
 
     # don't need to declare all columns for it to populate them
-    df = pd.DataFrame(columns=['ticker', 'date', 'time', 'link', 'source', 'title'])
+    df = pd.DataFrame(columns=['ticker', 'date', 'time', 'link', 'source', 'title', 'error'])
 
     # reduce cost by only reading once
     try:
@@ -457,16 +457,16 @@ def main():
 
 # weekday schedule
 
-# main()
+main()
 
-schedule.every().monday.at("08:30").do(main)
-schedule.every().tuesday.at("08:30").do(main)
-schedule.every().wednesday.at("08:30").do(main)
-schedule.every().thursday.at("08:30").do(main)
-schedule.every().friday.at("08:30").do(main)
-
-
-while True:
-    schedule.run_pending()
-    # 30 second sleep
-    time.sleep(30)
+# schedule.every().monday.at("08:30").do(main)
+# schedule.every().tuesday.at("08:30").do(main)
+# schedule.every().wednesday.at("08:30").do(main)
+# schedule.every().thursday.at("08:30").do(main)
+# schedule.every().friday.at("08:30").do(main)
+#
+#
+# while True:
+#     schedule.run_pending()
+#     # 30 second sleep
+#     time.sleep(30)
