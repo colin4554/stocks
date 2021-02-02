@@ -1,18 +1,19 @@
 # Default ignored files
 /shelf/
 /workspace.xml
-/postgress_credentials.txt
+
+# local logs and records
 /all_GCP.log
 /recordsGCP.txt
 /records.txt
-/tests.py
+
+# local credentials
+/postgress_credentials.txt
 /token.pickle
 /api-auth.json
-/venv
-/__pycache__
 /credentials.json
 
-
-
-# do this for GCP? I just don't want it to get overwritten when I try to make code updates
-# /records.txt
+# misc
+/tests.py
+/venv
+/__pycache__
