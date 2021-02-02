@@ -6,5 +6,13 @@
 /recordsGCP.txt
 /records.txt
 /tests.py
+/token.pickle
+/api-auth.json
+/venv
+/__pycache__
+/credentials.json
+
+
+
 # do this for GCP? I just don't want it to get overwritten when I try to make code updates
 # /records.txt
