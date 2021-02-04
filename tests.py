@@ -141,3 +141,33 @@ for i, table_row in []:
 CXO,Concho Resources,Energy,Oil & Gas Exploration & Production,2016-02-22,70
 TIF,Tiffany & Co.,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",2000-06-21,84
 '''
+
+
+class Parent:
+
+    def __init__(self):
+        self.target = 9
+        self.printFour()
+        print(self.target)
+
+    def printFour(self):
+        self.four = 4
+        print(4)
+
+
+
+class Child(Parent):
+
+    def __init__(self):
+        super().__init__()
+        self.target = 8
+        print(self.four)
+        print(self.target)
+    #     #self.printFour()
+    # def printFour(self):
+    #     print(5)
+    #super.__init__()
+
+
+Child()
+

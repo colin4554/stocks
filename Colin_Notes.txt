@@ -1,0 +1,120 @@
+
+
+
+TODO Before Github Publish:
+
+- see redact notes below
+
+
+
+
+
+------- TODO -------
+1. Find a way to deal with companies that get added and removed form S&P 500
+2. Improve news_date_range or s&p_500_ticker_scraper to automatically change weird stocks (BRK to BRK-A, etc.)
+3. RSS reader for edgar files (or any SEC filings)
+4. make things into different scripts (initialization function when returned database is [], etc.)
+    - initial_scrape.py, etc.
+5. GCP stock news scraper notes:
+    - Will incur a bigquery data loading cost after free trial
+        ^ could use Cloud Storage as intermediary to eliminate cost
+
+    - Websites with some text, but most behind a paywall are still scraped
+        ^ so full text, summary, etc. is sparse, but we don't know which articles
+
+    - Redact sensitive information and make public on github
+        ^ will also need to clean up code and add things (initialize function, pipeline, etc.)
+
+
+
+
+------- [REDACT] Github Commit Notes For Removing Sensitive Information -----
+
+1. Delete my email from emailUpdate.py
+2. Delete DATABASE_ID from local_stock_news_scraper.py
+3. Delete table id from gcp_stock...
+4. Delete ids from schedule
+
+
+
+
+### ------------------ Initialization Scipt ------------------ ###
+
+# initial setup, scrapes all tickers in batches of 10.  Hopefully I can examine any errors later, and use the get_ticker_list function to patch any up
+
+# df = pd.read_csv('S&P500.csv')
+# df = df.sort_values(by=['newsDateLength'], ascending=[False])
+#
+# tickerList = df['ticker'].tolist()
+#
+# # read bigquery once
+# client = bigquery.Client.from_service_account_json("api-auth.json")
+# oldDf = database_read(client)
+#
+# i = 0
+# while i < len(tickerList):
+#     try:
+#         tempTickers = tickerList[i:i+10]
+#         i += 10
+#         main(tempTickers, oldDf)
+#     except Exception as e:
+#         print("Error occurred at highest abstraction: " + str(e))
+
+
+
+
+------------------ GCP oauthclient error ------------------
+ImportError: file_cache is unavailable when using oauth2client >= 4.0.0 or google-auth
+
+Something like this: https://github.com/googleapis/google-api-python-client/issues/299
+I think it can be ignored, but not sure
+
+
+
+# --------------------------- if you need to install punkt ----------------------------
+
+# import nltk
+# import ssl
+#
+# try:
+#     _create_unverified_https_context = ssl._create_unverified_context
+# except AttributeError:
+#     pass
+# else:
+#     ssl._create_default_https_context = _create_unverified_https_context
+#
+# nltk.download()
+
+# -------------------------------------------------------------------------------------
+
+
+
+from README.md
+
+
+
+Note:  uninstall pyarrow, install, pyarrow, install bigquery-storage-..., and the problem I faced worked!
+
+More details to follow...
+
+
+### Troubleshooting
+
+grpcio troubleshooting:
+1 person said one dependency might be installing an old version
+so try `pip install grpcio` first, and then install requirements.txt
+
+1/17 - I install grpcio from source and it took forever (20-30 min), but then everything worked
+
+
+(below) didn't really work
+deleted from requirements.txt:
+
+`grpcio==1.34.0
+grpcio-tools==1.34.0`
+
+**ModuleNotFoundError: No module named 'oauth2client'**
+
+The solution is to upgrade your Python oauth2client library.
+
+```pip install --upgrade oauth2client```

@@ -1,44 +1,34 @@
 # Stock News Scraper (and other related, useful functions)
 
-A great way to collect data for investing, sentiment analysis, or other projects!
+_A great way to collect data for investing, sentiment analysis, or other projects!_
 
 - Scrape recent news articles for any ticker listed on finviz.com and store the title, full text, summary, keywords, and more!
-- Schedule your news scraping and use built in functions to only scrape new articles and based on the frequency of articles for that ticker
+- Schedule your news scraping and use built in functions to only scrape when necessary and avoid duplicate scraping
 - Get the current list of S&P 500 tickers by a simple scraping function
-- Email updates each time the scraper runs
-- Deploy the repository either locally or on Google Cloud Platform (for free!)
-
-### Deploying locally
-
--- steps --
+- Receive email updates each time the scraper runs with informative logs
+- Deploy the repository + database either locally or on Google Cloud Platform (for free!)
 
 
-### Deploying on Google Cloud Platform (GCP)
+### Running Scripts
+- Clone/download repository into desired directory
+- Run ```pip install -r requirements.txt```
+- If you want to run this package completely in the cloud, [set up a free GCP f1-micro instance](https://medium.com/@hbmy289/how-to-set-up-a-free-micro-vps-on-google-cloud-platform-bddee893ac09)
 
--- steps --
+### Deploying database locally
 
-TODO:
-- anything listed in python
-- deal with companies that get added and removed form s&p
-- rss reader for edgar files (or any SEC filings)
-- make things into different scripts (initialization function when returned database is [], etc.)
-
-
-
-Note:  uninstall pyarrow, install, pyarrow, install bigquery-storage-..., and the problem I faced worked!
-
-More details to follow...
+- Create local postgresql table
+- Set ```LOCAL_DATABASE_ID``` to postgresql table id
+- Use local_stock_news_scraper.py
 
 
-grpcio troubleshooting:
-1 person said one dependency might be installing an old version
-so try `pip install grpcio` first, and then install requirements.txt
+### Deploying database on Google Cloud Platform (GCP) as BigQuery
 
-1/17 - I install grpcio from source and it took forever (20-30 min), but then everything worked
+- Set up a google cloud platform account
+- Create a BigQuery table
+- Download credentials for BigQuery API
+- Set ```GCP_DATABASE_ID``` to BigQuery table id
+- Use gcp_stock_news_scraper.py
 
 
-(below) didn't really work
-deleted from requirements.txt:
 
-`grpcio==1.34.0
-grpcio-tools==1.34.0`
+_Disclaimer: This project was undertaken for learning and personal use.  Please be respectful of websites when scraping._

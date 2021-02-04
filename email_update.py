@@ -1,3 +1,10 @@
+"""Send emails from a google account with a given subject and message
+
+Notes:
+    - TODO: set the EMAIL_ADDRESS variable (recipient email address) below before using
+    - the first time the program runs, you will need to complete authorization with your google account
+"""
+
 import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -7,6 +14,9 @@ import os.path
 import base64
 from email.mime.text import MIMEText
 
+
+# set this before running!
+EMAIL_ADDRESS = 'colin.flueck@gmail.com'
 
 # this scope allows us to send emails
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
@@ -51,7 +61,7 @@ def create_message(subject, message_text):
     An object containing a base64url encoded email object
   """
   message = MIMEText(message_text)
-  message['to'] = 'colin.flueck@gmail.com'
+  message['to'] = EMAIL_ADDRESS
   message['from'] = 'GCP Stock News Scraper Bot'
   message['subject'] = subject
   return {'raw': base64.urlsafe_b64encode(message.as_string().encode()).decode()}

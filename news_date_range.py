@@ -1,3 +1,9 @@
+"""Computes average time range of articles for tickers in S&P500 by scraping first and last date on finviz
+
+Notes:
+    - stores data in the newsDateLength of the S&P500.csv
+"""
+
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -5,6 +11,14 @@ import time
 from datetime import datetime
 
 def finVizTable(ticker, HEADERS):
+    """Gets all article urls from finviz for a specific ticker
+
+    Args:
+        ticker: ticker to scrape for
+
+    Returns:
+        List of news article urls and date/times
+    """
     url = 'https://finviz.com/quote.ashx?t=' + ticker
 
     # gets news data from table
