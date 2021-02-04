@@ -22,7 +22,7 @@ class LocalScrape(GCPScrape):
 
         Notes:
             - only database functions are different for local and GCP + log names
-            - Schedule this script with schedule.py
+            - Schedule this script with schedule_scraper.py
         """
         super().__init__(database_id)
         self.log_name = str(datetime.now().date()) + ": local.log"

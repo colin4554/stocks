@@ -26,7 +26,7 @@ class GCPScrape:
         Notes:
             - I only turned this into a class to user inheritance for the postrgresql script,
               you can view the old main() function at the bottom
-            - schedule this script with schedule.py
+            - schedule this script with schedule_scraper.py
         """
         self.database_id = database_id  # format: '`project_name.dataset_name.table_name`'
 
@@ -323,7 +323,6 @@ class GCPScrape:
         # saves data by not retrieving any unneccesary columns (1/300 cost)
         #'SELECT ticker, date, time FROM `the-utility-300815.stock_news.SP500`'
         # ---------------------------------------------------------------------------- #
-        print("ggg")
         return client.query("SELECT date, time, ticker FROM " + self.database_id).to_dataframe()
 
 
