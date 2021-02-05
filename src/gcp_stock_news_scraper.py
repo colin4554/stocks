@@ -33,7 +33,7 @@ class GCPScrape:
         # header for requests
         self.HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36'}
 
-        self.file_name = "all_GCP.log"
+        self.file_name = "../all_GCP.log"
         # creates log file
         self.log_name = str(datetime.now().date()) + ": GCP.log"
         logging.basicConfig(level=logging.INFO, handlers=[logging.FileHandler(self.log_name), logging.StreamHandler()],
@@ -46,7 +46,7 @@ class GCPScrape:
         self.df = pd.DataFrame(columns=['ticker', 'date', 'time', 'link', 'source', 'title', 'error'])
 
         # big query client, need to include authorization
-        self.client = bigquery.Client.from_service_account_json("api-auth.json")
+        self.client = bigquery.Client.from_service_account_json("../api-auth.json")
 
         # reduce cost by only reading once
         try:
@@ -352,7 +352,7 @@ class GCPScrape:
             List of tickers to scrape
         """
         ticker_list = []
-        df = pd.read_csv('S&P500.csv')
+        df = pd.read_csv('../S&P500.csv')
         main_ticker_list = [df['ticker'], df['newsDateLength']]
 
         for i in range(len(main_ticker_list[0])):

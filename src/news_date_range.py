@@ -32,7 +32,7 @@ def finVizTable(ticker, HEADERS):
 
 if __name__ == "__main__":
 
-    df = pd.read_csv('S&P500.csv')
+    df = pd.read_csv('../S&P500.csv')
 
     # I added BRK-A and BRK-B instead of just BRK
     mainTickerList = df['ticker']

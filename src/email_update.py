@@ -30,9 +30,9 @@ def authorizeCreds():
     """
     creds = None
 
-    if os.path.exists('token.pickle'):
+    if os.path.exists('../token.pickle'):
         # read the token from the file and store as creds
-        with open('token.pickle', 'rb') as token:
+        with open('../token.pickle', 'rb') as token:
             creds = pickle.load(token)
 
             # If credentials are not available or are invalid, ask the user to log in through browser
@@ -40,11 +40,11 @@ def authorizeCreds():
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file('../credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
 
             # saves creds so sign in isn't necessary next time
-        with open('token.pickle', 'wb') as token:
+        with open('../token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
     return creds
