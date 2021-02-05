@@ -8,7 +8,7 @@ Notes:
 """
 
 from gcp_stock_news_scraper import GCPScrape
-from src.local_stock_news_scraper import LocalScrape
+from local_stock_news_scraper import LocalScrape
 
 import schedule
 import time
