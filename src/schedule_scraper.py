@@ -20,7 +20,6 @@ def run_GCP():
     # GCP_DATABASE_ID = '`project_name.dataset_name.table_name`'
     GCP_DATABASE_ID = '`the-utility-300815.stock_news.SP500`'
     GCPScrape(GCP_DATABASE_ID)
-run_GCP()
 
 # # weekday schedule
 schedule.every().monday.at("08:30").do(run_GCP)
