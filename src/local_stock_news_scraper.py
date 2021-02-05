@@ -12,7 +12,7 @@ import logging
 from datetime import datetime
 
 # parent class
-from gcp_stock_news_scraper import GCPScrape
+from src.gcp_stock_news_scraper import GCPScrape
 
 
 class LocalScrape(GCPScrape):

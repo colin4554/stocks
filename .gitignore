@@ -12,9 +12,11 @@
 /token.pickle
 /api-auth.json
 /credentials.json
+/notes.txt
 
 # misc
-/tests.py
+/src/tests.py
 /venv
 /__pycache__
 /stockNewsScraper.py
+/.idea
