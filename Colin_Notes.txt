@@ -10,6 +10,7 @@ TODO Before Github Publish:
 
 
 ------- TODO -------
+1A. Figure out a way to scrape investors.com, currently get 403 errors
 1. Find a way to deal with companies that get added and removed form S&P 500
 2. Improve news_date_range or s&p_500_ticker_scraper to automatically change weird stocks (BRK to BRK-A, etc.)
 3. RSS reader for edgar files (or any SEC filings)

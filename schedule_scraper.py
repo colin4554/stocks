@@ -7,7 +7,6 @@ Notes:
     - schedule library allows lost of flexibility for scheduling as needed
 """
 
-
 from gcp_stock_news_scraper import GCPScrape
 from local_stock_news_scraper import LocalScrape
 
@@ -15,21 +14,20 @@ import schedule
 import time
 
 
-
-
 ### ------------------ GCP Scheduling ------------------ ###
 
+def run_GCP():
+    # GCP_DATABASE_ID = '`project_name.dataset_name.table_name`'
+    GCP_DATABASE_ID = '`the-utility-300815.stock_news.SP500`'
+    GCPScrape(GCP_DATABASE_ID)
 
-# GCP_DATABASE_ID = '`project_name.dataset_name.table_name`'
-GCP_DATABASE_ID = '`the-utility-300815.stock_news.SP500`'
-# GCPScrape(GCP_DATABASE_ID)
 
 # # weekday schedule
-schedule.every().monday.at("08:30").do(GCPScrape(GCP_DATABASE_ID))
-schedule.every().tuesday.at("08:30").do(GCPScrape(GCP_DATABASE_ID))
-schedule.every().wednesday.at("08:30").do(GCPScrape(GCP_DATABASE_ID))
-schedule.every().thursday.at("08:30").do(GCPScrape(GCP_DATABASE_ID))
-schedule.every().friday.at("08:30").do(GCPScrape(GCP_DATABASE_ID))
+schedule.every().monday.at("08:30").do(run_GCP)
+schedule.every().tuesday.at("08:30").do(run_GCP)
+schedule.every().wednesday.at("08:30").do(run_GCP)
+schedule.every().thursday.at("08:30").do(run_GCP)
+schedule.every().friday.at("08:30").do(run_GCP)
 
 
 while True:
@@ -38,24 +36,23 @@ while True:
     time.sleep(30)
 
 
-
 ### ------------------ Local Scheduling ------------------ ###
 
-
-# LOCAL_DATABASE_ID = "Database Dialect://Username:Password@Server/Name of Database"
-LOCAL_DATABASE_ID = "postgresql+psycopg2://postgres:2017@localhost/stock-news"
-
-#LocalScrape(LOCAL_DATABASE_ID)
-
-# schedule.every().monday.at("08:30").do(LocalScrape(LOCAL_DATABASE_ID))
-# schedule.every().tuesday.at("08:30").do(LocalScrape(LOCAL_DATABASE_ID))
-# schedule.every().wednesday.at("08:30").do(LocalScrape(LOCAL_DATABASE_ID))
-# schedule.every().thursday.at("08:30").do(LocalScrape(LOCAL_DATABASE_ID))
-# schedule.every().friday.at("08:30").do(LocalScrape(LOCAL_DATABASE_ID))
+#
+# def run_local():
+#     # LOCAL_DATABASE_ID = "Database Dialect://Username:Password@Server/Name of Database"
+#     LOCAL_DATABASE_ID = "postgresql+psycopg2://postgres:2017@localhost/stock-news"
+#     LocalScrape(LOCAL_DATABASE_ID)
+#
+# schedule.every().monday.at("09:30").do(run_local)
+# schedule.every().tuesday.at("09:30").do(run_local)
+# schedule.every().wednesday.at("09:30").do(run_local)
+# schedule.every().thursday.at("09:30").do(run_local)
+# schedule.every().friday.at("09:30").do(run_local)
+#
 #
 # while True:
 #     schedule.run_pending()
 #     # 30 second sleep
 #     time.sleep(30)
-
 
