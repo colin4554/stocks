@@ -7,7 +7,7 @@ Notes:
     - schedule library allows lost of flexibility for scheduling as needed
 """
 
-from src.gcp_stock_news_scraper import GCPScrape
+from gcp_stock_news_scraper import GCPScrape
 from src.local_stock_news_scraper import LocalScrape
 
 import schedule

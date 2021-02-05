@@ -15,7 +15,7 @@ from google.cloud import bigquery
 import logging
 import os
 
-from src.email_update import send_email
+from email_update import send_email
 
 
 class GCPScrape:
