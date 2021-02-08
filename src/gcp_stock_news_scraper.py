@@ -320,8 +320,7 @@ class GCPScrape:
         # table = client.get_table(table_ref)
         # return client.list_rows(table).to_DataFrame()
 
-        # saves data by not retrieving any unneccesary columns (1/300 cost)
-        #'SELECT ticker, date, time FROM `the-utility-300815.stock_news.SP500`'
+        # new way saves data by not retrieving any unneccesary columns (1/300 cost)
         # ---------------------------------------------------------------------------- #
         return client.query("SELECT date, time, ticker FROM " + self.database_id).to_dataframe()
 
