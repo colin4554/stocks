@@ -18,7 +18,7 @@ import time
 
 def run_GCP():
     # GCP_DATABASE_ID = '`project_name.dataset_name.table_name`'
-    GCP_DATABASE_ID = '`the-utility-300815.stock_news.SP500`'
+    GCP_DATABASE_ID = ""
     GCPScrape(GCP_DATABASE_ID)
 
 # # weekday schedule
@@ -40,7 +40,7 @@ while True:
 #
 # def run_local():
 #     # LOCAL_DATABASE_ID = "Database Dialect://Username:Password@Server/Name of Database"
-#     LOCAL_DATABASE_ID = "postgresql+psycopg2://postgres:2017@localhost/stock-news"
+#     LOCAL_DATABASE_ID = ""
 #     LocalScrape(LOCAL_DATABASE_ID)
 #
 # schedule.every().monday.at("09:30").do(run_local)
