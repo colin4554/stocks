@@ -16,7 +16,7 @@ from email.mime.text import MIMEText
 
 
 # set this before running!
-EMAIL_ADDRESS = 'colin.flueck@gmail.com'
+EMAIL_ADDRESS = ""
 
 # this scope allows us to send emails
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
