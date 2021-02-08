@@ -313,10 +313,10 @@ class GCPScrape:
 
         # ---------------- alternate/old way to get all table data  ------------------ #
 
-        # project = "the-utility-300815"
-        # dataset_id = "stock_news"
+        # project = "PROJECT_ID"
+        # dataset_id = "DATABASE_ID"
         # dataset_ref = bigquery.DatasetReference(project, dataset_id)
-        # table_ref = dataset_ref.table("SP500")
+        # table_ref = dataset_ref.table("TABLE_ID")
         # table = client.get_table(table_ref)
         # return client.list_rows(table).to_DataFrame()
 
