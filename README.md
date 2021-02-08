@@ -12,12 +12,13 @@ _A great way to collect data for investing, sentiment analysis, or other project
 ### Running Scripts
 - Clone/download repository into desired directory
 - Run ```pip install -r requirements.txt```
+- Set ```EMAIL_ADDRESS``` in email_update.py to address that should receive log updates
 - If you want to run this package completely in the cloud, [set up a free GCP f1-micro instance](https://medium.com/@hbmy289/how-to-set-up-a-free-micro-vps-on-google-cloud-platform-bddee893ac09)
 
 ### Deploying database locally
 
 - Create local postgresql table
-- Set ```LOCAL_DATABASE_ID``` to postgresql table id
+- Set ```LOCAL_DATABASE_ID``` in schedule_scraper.py to postgresql table id
 - Use local_stock_news_scraper.py
 
 
@@ -26,7 +27,7 @@ _A great way to collect data for investing, sentiment analysis, or other project
 - Set up a google cloud platform account
 - Create a BigQuery table
 - Download credentials for BigQuery API
-- Set ```GCP_DATABASE_ID``` to BigQuery table id
+- Set ```GCP_DATABASE_ID``` in schedule_scraper.py to BigQuery table id
 - Use gcp_stock_news_scraper.py
 
 
